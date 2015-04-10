@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.Data",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.Tests", "FinancialForecasting.Tests\FinancialForecasting.Tests.csproj", "{CBAD086A-B6BE-45A3-A74A-5C45639A51D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.DataAccess", "FinancialForecasting.DataAccess\FinancialForecasting.DataAccess.csproj", "{3E827CED-AFEC-4F05-AFDD-7673D46AAD6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{CBAD086A-B6BE-45A3-A74A-5C45639A51D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBAD086A-B6BE-45A3-A74A-5C45639A51D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBAD086A-B6BE-45A3-A74A-5C45639A51D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E827CED-AFEC-4F05-AFDD-7673D46AAD6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E827CED-AFEC-4F05-AFDD-7673D46AAD6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E827CED-AFEC-4F05-AFDD-7673D46AAD6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E827CED-AFEC-4F05-AFDD-7673D46AAD6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
