@@ -1,6 +1,6 @@
 namespace FinancialForecasting.Migration.DataContracts
 {
-    public class EntetpriseIndexDto
+    public class EnterpriseIndexDto
     {
         public int Id { get; set; }
 

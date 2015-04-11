@@ -11,6 +11,12 @@ namespace FinancialForecasting.Migration
         IEnumerable<EnterpriseDto> GetEnterprises();
 
         [OperationContract]
-        IEnumerable<EntetpriseIndexDto> GetIndexes();
+        IEnumerable<EnterpriseIndexDto> GetIndexes();
+
+        [OperationContract]
+        void InserEnterprise(EnterpriseDto enterprise);
+
+        [OperationContract]
+        void InsertEnterpriseIndex(EnterpriseIndexDto enterpriseIndex);
     }
 }

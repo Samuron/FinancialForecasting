@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using FastMapper;
 using FinancialForecasting.Migration.DataContracts;
+using FinancialForecasting.Migration.Entities;
 
 namespace FinancialForecasting.Migration
 {
@@ -30,9 +31,23 @@ namespace FinancialForecasting.Migration
             return _context.Enterprises.Project().To<EnterpriseDto>().ToList();
         }
 
-        public IEnumerable<EntetpriseIndexDto> GetIndexes()
+        public IEnumerable<EnterpriseIndexDto> GetIndexes()
         {
-            return _context.EnterpriseIndices.Project().To<EntetpriseIndexDto>().ToList();
+            return _context.EnterpriseIndices.Project().To<EnterpriseIndexDto>().ToList();
+        }
+
+        public void InserEnterprise(EnterpriseDto enterprise)
+        {
+            var enterpriseEntity = TypeAdapter.Adapt<Enterprise>(enterprise);
+            _context.Enterprises.Add(enterpriseEntity);
+            _context.SaveChanges();
+        }
+
+        public void InsertEnterpriseIndex(EnterpriseIndexDto enterpriseIndex)
+        {
+            var enterpriseIndexEntity = TypeAdapter.Adapt<EnterpriseIndex>(enterpriseIndex);
+            _context.EnterpriseIndices.Add(enterpriseIndexEntity);
+            _context.SaveChanges();
         }
     }
 }

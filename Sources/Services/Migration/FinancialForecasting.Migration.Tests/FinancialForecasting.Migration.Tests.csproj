@@ -60,6 +60,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="FinancialForecastingDataTests.cs" />
+    <Compile Include="MigrationServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

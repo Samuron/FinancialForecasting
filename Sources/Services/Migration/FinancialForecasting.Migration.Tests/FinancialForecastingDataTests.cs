@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using FinancialForecasting.Migration.Entities;
+﻿using FinancialForecasting.Migration.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FinancialForecasting.Migration.Tests
@@ -8,27 +7,48 @@ namespace FinancialForecasting.Migration.Tests
     public class FinancialForecastingDataTests
     {
         [TestMethod]
-        public void FinancialForecastingDatabaseCreatedSuccessfully()
+        public void EnterpriseEntityIntegrationTest()
         {
+            var id = 0;
             using (var context = new FinancialForecastingContext())
             {
-                var test = context.Enterprises.ToList();
-            }
-        }
+                var enterprise = new Enterprise {Name = "TestEnterprise"};
+                context.Enterprises.Add(enterprise);
+                id = enterprise.Id;
 
-        [TestMethod]
-        public void EnterpriseCanBeSavedInDatabase()
-        {
-            using (var context = new FinancialForecastingContext())
-            {
-                context.Enterprises.Add(new Enterprise {Name = "TestEnterprise"});
+                Assert.IsTrue(id != 0);
                 context.SaveChanges();
             }
 
             using (var context = new FinancialForecastingContext())
             {
-                var testEntity = context.Enterprises.FirstOrDefault(x => x.Name == "TestEnterprise");
+                var testEntity = context.Enterprises.Find(id);
                 Assert.IsNotNull(testEntity);
+
+                context.Enterprises.Remove(testEntity);
+                context.SaveChanges();
+            }
+        }
+
+        [TestMethod]
+        public void EnterpriseIndexEntityIntegrationTest()
+        {
+            var id = 0;
+            using (var context = new FinancialForecastingContext())
+            {
+                var enterprise = new Enterprise { Name = "TestEnterprise" };
+                context.Enterprises.Add(enterprise);
+                id = enterprise.Id;
+
+                Assert.IsTrue(id != 0);
+                context.SaveChanges();
+            }
+
+            using (var context = new FinancialForecastingContext())
+            {
+                var testEntity = context.Enterprises.Find(id);
+                Assert.IsNotNull(testEntity);
+
                 context.Enterprises.Remove(testEntity);
                 context.SaveChanges();
             }
