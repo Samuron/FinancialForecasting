@@ -1,9 +1,8 @@
 ﻿using System.Linq;
-using FinancialForecasting.Data;
-using FinancialForecasting.Data.Entities;
+using FinancialForecasting.Migration.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FinancialForecasting.Tests
+namespace FinancialForecasting.Migration.Tests
 {
     [TestClass]
     public class FinancialForecastingDataTests
@@ -13,6 +12,7 @@ namespace FinancialForecasting.Tests
         {
             using (var context = new FinancialForecastingContext())
             {
+                var test = context.Enterprises.ToList();
             }
         }
 

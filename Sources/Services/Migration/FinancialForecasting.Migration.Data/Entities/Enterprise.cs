@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FinancialForecasting.Data.Entities
+namespace FinancialForecasting.Migration.Entities
 {
     public class Enterprise
     {

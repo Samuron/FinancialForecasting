@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CBAD086A-B6BE-45A3-A74A-5C45639A51D4}</ProjectGuid>
+    <ProjectGuid>{02264147-3278-403F-B28E-FBC03A90B1C6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FinancialForecasting.Tests</RootNamespace>
-    <AssemblyName>FinancialForecasting.Tests</AssemblyName>
+    <RootNamespace>FinancialForecasting.Migration.Tests</RootNamespace>
+    <AssemblyName>FinancialForecasting.Migration.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -36,11 +36,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -63,9 +63,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FinancialForecasting.Data\FinancialForecasting.Data.csproj">
-      <Project>{ea349abd-292e-462d-95f5-a30173607dfc}</Project>
-      <Name>FinancialForecasting.Data</Name>
+    <ProjectReference Include="..\FinancialForecasting.Migration.Data\FinancialForecasting.Migration.Data.csproj">
+      <Project>{536E4A73-6DAA-42B3-A844-F5783518E39D}</Project>
+      <Name>FinancialForecasting.Migration.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

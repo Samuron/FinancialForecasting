@@ -1,11 +1,12 @@
 ﻿using System.Data.Entity;
-using FinancialForecasting.Data.Entities;
+using FinancialForecasting.Migration.Entities;
 
-namespace FinancialForecasting.Data
+namespace FinancialForecasting.Migration
 {
     public class FinancialForecastingContext : DbContext
     {
-        public FinancialForecastingContext() : base("FinancialForecastingDB")
+        public FinancialForecastingContext()
+            : base("FinancialForecastingDB")
         {
         }
 

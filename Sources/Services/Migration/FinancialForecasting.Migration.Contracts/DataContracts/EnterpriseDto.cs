@@ -1,4 +1,4 @@
-namespace FinancialForecasting.DataAccess
+namespace FinancialForecasting.Migration.DataContracts
 {
     public class EnterpriseDto
     {

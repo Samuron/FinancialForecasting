@@ -1,6 +1,6 @@
-namespace FinancialForecasting.DataAccess
+﻿namespace FinancialForecasting.Migration.Entities
 {
-    public class EntetpriseIndexDto
+    public class EnterpriseIndex
     {
         public int Id { get; set; }
 
@@ -9,5 +9,7 @@ namespace FinancialForecasting.DataAccess
         public double X2 { get; set; }
 
         public int EnterpriseId { get; set; }
+
+        public virtual Enterprise Enterprise { get; set; }
     }
 }

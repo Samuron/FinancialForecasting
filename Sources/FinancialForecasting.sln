@@ -3,11 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.22609.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.Data", "FinancialForecasting.Data\FinancialForecasting.Data.csproj", "{EA349ABD-292E-462D-95F5-A30173607DFC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{BB23DDBF-9A37-48DF-84AC-89DE09528F4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.Tests", "FinancialForecasting.Tests\FinancialForecasting.Tests.csproj", "{CBAD086A-B6BE-45A3-A74A-5C45639A51D4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migration", "Migration", "{3D9D3A01-7DBF-47DD-B178-D252B3B74527}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.DataAccess", "FinancialForecasting.DataAccess\FinancialForecasting.DataAccess.csproj", "{3E827CED-AFEC-4F05-AFDD-7673D46AAD6A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.Migration.Data", "Services\Migration\FinancialForecasting.Migration.Data\FinancialForecasting.Migration.Data.csproj", "{536E4A73-6DAA-42B3-A844-F5783518E39D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.Migration.Tests", "Services\Migration\FinancialForecasting.Migration.Tests\FinancialForecasting.Migration.Tests.csproj", "{02264147-3278-403F-B28E-FBC03A90B1C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.Migration.Contracts", "Services\Migration\FinancialForecasting.Migration.Contracts\FinancialForecasting.Migration.Contracts.csproj", "{41A813B7-11E2-4635-BB6D-D5222076DEFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.Migration.Service", "Services\Migration\FinancialForecasting.Migration.Service\FinancialForecasting.Migration.Service.csproj", "{6E1BC878-A2BE-42D9-B544-778AA5419240}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,20 +21,31 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EA349ABD-292E-462D-95F5-A30173607DFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EA349ABD-292E-462D-95F5-A30173607DFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EA349ABD-292E-462D-95F5-A30173607DFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EA349ABD-292E-462D-95F5-A30173607DFC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CBAD086A-B6BE-45A3-A74A-5C45639A51D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CBAD086A-B6BE-45A3-A74A-5C45639A51D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CBAD086A-B6BE-45A3-A74A-5C45639A51D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CBAD086A-B6BE-45A3-A74A-5C45639A51D4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3E827CED-AFEC-4F05-AFDD-7673D46AAD6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E827CED-AFEC-4F05-AFDD-7673D46AAD6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E827CED-AFEC-4F05-AFDD-7673D46AAD6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E827CED-AFEC-4F05-AFDD-7673D46AAD6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{536E4A73-6DAA-42B3-A844-F5783518E39D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{536E4A73-6DAA-42B3-A844-F5783518E39D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{536E4A73-6DAA-42B3-A844-F5783518E39D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{536E4A73-6DAA-42B3-A844-F5783518E39D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02264147-3278-403F-B28E-FBC03A90B1C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02264147-3278-403F-B28E-FBC03A90B1C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02264147-3278-403F-B28E-FBC03A90B1C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02264147-3278-403F-B28E-FBC03A90B1C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41A813B7-11E2-4635-BB6D-D5222076DEFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41A813B7-11E2-4635-BB6D-D5222076DEFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41A813B7-11E2-4635-BB6D-D5222076DEFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41A813B7-11E2-4635-BB6D-D5222076DEFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E1BC878-A2BE-42D9-B544-778AA5419240}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E1BC878-A2BE-42D9-B544-778AA5419240}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E1BC878-A2BE-42D9-B544-778AA5419240}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E1BC878-A2BE-42D9-B544-778AA5419240}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3D9D3A01-7DBF-47DD-B178-D252B3B74527} = {BB23DDBF-9A37-48DF-84AC-89DE09528F4F}
+		{536E4A73-6DAA-42B3-A844-F5783518E39D} = {3D9D3A01-7DBF-47DD-B178-D252B3B74527}
+		{02264147-3278-403F-B28E-FBC03A90B1C6} = {3D9D3A01-7DBF-47DD-B178-D252B3B74527}
+		{41A813B7-11E2-4635-BB6D-D5222076DEFC} = {3D9D3A01-7DBF-47DD-B178-D252B3B74527}
+		{6E1BC878-A2BE-42D9-B544-778AA5419240} = {3D9D3A01-7DBF-47DD-B178-D252B3B74527}
 	EndGlobalSection
 EndGlobal
