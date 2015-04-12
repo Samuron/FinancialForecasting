@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
-using System.Windows.Input;
 using FinancialForecasting.Desktop.Annotations;
 using FinancialForecasting.Desktop.Clients;
 using FinancialForecasting.Migration;
@@ -21,14 +20,14 @@ namespace FinancialForecasting.Desktop
         private string _filePath;
         private IEnumerable<EnterpriseIndexDto> _indices;
         private int _numberOfRows;
-        private ICommand _selectFileCommand;
-        private ICommand _startMigrationCommand;
+        private DelegateCommand _selectFileCommand;
+        private DelegateCommand _startMigrationCommand;
 
         public MigrationViewModel()
         {
             _service = new MigrationClient(this);
             SelectFileCommand = new DelegateCommand(SelectFile);
-            StartMigrationCommand = new DelegateCommand(StartMigration);
+            StartMigrationCommand = new DelegateCommand(StartMigration, o => FilePath != null);
             Indices = _service.GetIndexes();
             NumberOfRows = 100;
             CurrentRow = 0;
@@ -78,11 +77,12 @@ namespace FinancialForecasting.Desktop
                 if (value == _filePath)
                     return;
                 _filePath = value;
+                StartMigrationCommand.RaiseCanExecuteChanged();
                 OnPropertyChanged();
             }
         }
 
-        public ICommand SelectFileCommand
+        public DelegateCommand SelectFileCommand
         {
             get { return _selectFileCommand; }
             set
@@ -94,7 +94,7 @@ namespace FinancialForecasting.Desktop
             }
         }
 
-        public ICommand StartMigrationCommand
+        public DelegateCommand StartMigrationCommand
         {
             get { return _startMigrationCommand; }
             set
