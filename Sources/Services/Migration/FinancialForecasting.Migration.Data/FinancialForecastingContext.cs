@@ -5,6 +5,11 @@ namespace FinancialForecasting.Migration
 {
     public class FinancialForecastingContext : DbContext
     {
+        static FinancialForecastingContext()
+        {
+            Database.SetInitializer(new FinancialForecastingInitializer());
+        }
+
         public FinancialForecastingContext()
             : base("FinancialForecastingDB")
         {

@@ -1,4 +1,5 @@
-﻿using FinancialForecasting.Migration.Entities;
+﻿using System;
+using FinancialForecasting.Migration.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FinancialForecasting.Migration.Tests
@@ -9,14 +10,14 @@ namespace FinancialForecasting.Migration.Tests
         [TestMethod]
         public void EnterpriseEntityIntegrationTest()
         {
-            var id = 0;
+            string id = String.Empty;
             using (var context = new FinancialForecastingContext())
             {
-                var enterprise = new Enterprise {Name = "TestEnterprise"};
+                var enterprise = new Enterprise {Id = "TestEnterprise"};
                 context.Enterprises.Add(enterprise);
                 id = enterprise.Id;
 
-                Assert.IsTrue(id != 0);
+                Assert.IsTrue(id != String.Empty);
                 context.SaveChanges();
             }
 
@@ -33,14 +34,14 @@ namespace FinancialForecasting.Migration.Tests
         [TestMethod]
         public void EnterpriseIndexEntityIntegrationTest()
         {
-            var id = 0;
+            string id = String.Empty;
             using (var context = new FinancialForecastingContext())
             {
                 var enterprise = new Enterprise { Name = "TestEnterprise" };
                 context.Enterprises.Add(enterprise);
                 id = enterprise.Id;
 
-                Assert.IsTrue(id != 0);
+                Assert.IsTrue(id != String.Empty);
                 context.SaveChanges();
             }
 

@@ -51,6 +51,7 @@
     <Compile Include="Entities\Enterprise.cs" />
     <Compile Include="Entities\EnterpriseIndex.cs" />
     <Compile Include="FinancialForecastingContext.cs" />
+    <Compile Include="FinancialForecastingInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

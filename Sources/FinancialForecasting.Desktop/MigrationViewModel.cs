@@ -1,22 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
+using System.ServiceModel;
 using System.Windows.Input;
 using FinancialForecasting.Desktop.Annotations;
+using FinancialForecasting.Desktop.Clients;
+using FinancialForecasting.Migration;
+using FinancialForecasting.Migration.DataContracts;
 using Microsoft.Win32;
 
 namespace FinancialForecasting.Desktop
 {
-    public class MigrationViewModel : INotifyPropertyChanged
+    [CallbackBehavior(UseSynchronizationContext = false, ConcurrencyMode = ConcurrencyMode.Reentrant)]
+    public class MigrationViewModel : INotifyPropertyChanged, INotifyMigrationProgress
     {
+        private readonly MigrationClient _service;
         private int _currentRow;
         private string _filePath;
+        private IEnumerable<EnterpriseIndexDto> _indices;
         private int _numberOfRows;
         private ICommand _selectFileCommand;
+        private ICommand _startMigrationCommand;
 
         public MigrationViewModel()
         {
+            _service = new MigrationClient(this);
             SelectFileCommand = new DelegateCommand(SelectFile);
+            StartMigrationCommand = new DelegateCommand(StartMigration);
+            Indices = _service.GetIndexes();
+            NumberOfRows = 100;
+            CurrentRow = 0;
         }
 
         public int NumberOfRows
@@ -27,6 +42,18 @@ namespace FinancialForecasting.Desktop
                 if (value == _numberOfRows)
                     return;
                 _numberOfRows = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public IEnumerable<EnterpriseIndexDto> Indices
+        {
+            get { return _indices; }
+            set
+            {
+                if (Equals(value, _indices))
+                    return;
+                _indices = value;
                 OnPropertyChanged();
             }
         }
@@ -67,7 +94,40 @@ namespace FinancialForecasting.Desktop
             }
         }
 
+        public ICommand StartMigrationCommand
+        {
+            get { return _startMigrationCommand; }
+            set
+            {
+                if (Equals(value, _startMigrationCommand))
+                    return;
+                _startMigrationCommand = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public void AcceptMaxRows(int maxRows)
+        {
+            NumberOfRows = maxRows;
+        }
+
+        public void AcceptCurrentRow(int rowNumber)
+        {
+            CurrentRow = rowNumber;
+            if (CurrentRow == NumberOfRows)
+                Indices = _service.GetIndexes();
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void StartMigration(object obj)
+        {
+            var fileStream = new MemoryStream(File.ReadAllBytes(FilePath));
+            if (Path.GetExtension(FilePath) == ".xls")
+                _service.MigrateXls(fileStream);
+            if (Path.GetExtension(FilePath) == ".xlsx")
+                _service.MigrateXlsx(fileStream);
+        }
 
         private void SelectFile(object sender)
         {

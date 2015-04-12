@@ -1,6 +1,4 @@
-﻿using MahApps.Metro.Controls;
-
-namespace FinancialForecasting.Desktop
+﻿namespace FinancialForecasting.Desktop
 {
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
@@ -11,6 +9,7 @@ namespace FinancialForecasting.Desktop
         {
             InitializeComponent();
             DataContext = new MainViewModel();
+            ;
         }
     }
 }
