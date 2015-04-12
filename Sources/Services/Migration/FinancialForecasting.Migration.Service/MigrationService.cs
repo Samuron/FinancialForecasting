@@ -11,8 +11,11 @@ using FinancialForecasting.Migration.Entities;
 
 namespace FinancialForecasting.Migration
 {
-    [ServiceBehavior(UseSynchronizationContext = false, InstanceContextMode = InstanceContextMode.PerCall,
-        ConcurrencyMode = ConcurrencyMode.Multiple)]
+    [ServiceBehavior(
+        UseSynchronizationContext = false, 
+        InstanceContextMode = InstanceContextMode.PerCall,
+        ConcurrencyMode = ConcurrencyMode.Multiple, 
+        IncludeExceptionDetailInFaults = true)]
     public class MigrationService : IMigrationService, IDisposable
     {
         private readonly FinancialForecastingContext _context;

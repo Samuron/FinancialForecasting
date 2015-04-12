@@ -2,7 +2,7 @@
 
 namespace FinancialForecasting.Migration
 {
-    public class FinancialForecastingInitializer : DropCreateDatabaseAlways<FinancialForecastingContext>
+    public class FinancialForecastingInitializer : DropCreateDatabaseIfModelChanges<FinancialForecastingContext>
     {
     }
 }

@@ -11,7 +11,7 @@ namespace FinancialForecasting.Migration
         }
 
         public FinancialForecastingContext()
-            : base("FinancialForecastingDB")
+            : base("name=FinancialForecastingContext")
         {
         }
 
