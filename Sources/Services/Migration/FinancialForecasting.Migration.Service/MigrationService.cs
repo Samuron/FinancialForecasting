@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
@@ -11,11 +10,8 @@ using FinancialForecasting.Migration.Entities;
 
 namespace FinancialForecasting.Migration
 {
-    [ServiceBehavior(
-        UseSynchronizationContext = false, 
-        InstanceContextMode = InstanceContextMode.PerCall,
-        ConcurrencyMode = ConcurrencyMode.Multiple, 
-        IncludeExceptionDetailInFaults = true)]
+    [ServiceBehavior(UseSynchronizationContext = false, InstanceContextMode = InstanceContextMode.PerCall,
+        ConcurrencyMode = ConcurrencyMode.Multiple, IncludeExceptionDetailInFaults = true)]
     public class MigrationService : IMigrationService, IDisposable
     {
         private readonly FinancialForecastingContext _context;
@@ -58,55 +54,40 @@ namespace FinancialForecasting.Migration
 
         public void MigrateXls(Stream stream)
         {
-            using (var memoryStream = new MemoryStream())
-            {
-                stream.CopyTo(memoryStream);
-                using (var reader = ExcelReaderFactory.CreateBinaryReader(memoryStream))
-                {
-                    var maxRows = reader.AsDataSet().Tables[0].Rows.Count;
-                    var currentRow = 1;
-                    _listener.AcceptMaxRows(maxRows);
-                    reader.IsFirstRowAsColumnNames = true;
-                    reader.Read();
-                    while (reader.Read())
-                    {
-                        var id = reader.GetString(7);
-                        var name = reader.GetString(8);
-                        var enterprise = _context.Enterprises.Find(id) ?? InsertedEnterprise(id, name);
-                        _context.EnterpriseIndices.Add(ReadEnterpriseIndex(reader, enterprise));
-                        _listener.AcceptCurrentRow(currentRow++);
-                    }
-                    _listener.AcceptCurrentRow(currentRow);
-                    _context.SaveChanges();
-                }
-            }
+            Migrate(stream, ExcelReaderFactory.CreateBinaryReader);
         }
 
         public void MigrateXlsx(Stream stream)
         {
+            Migrate(stream, ExcelReaderFactory.CreateOpenXmlReader);
         }
 
-        private static EnterpriseIndex ReadEnterpriseIndex(IDataRecord reader, Enterprise enterprise)
+        private void Migrate(Stream stream, Func<MemoryStream, IExcelDataReader> factory)
         {
-            return new EnterpriseIndex
+            using (var memoryStream = new MemoryStream())
             {
-                X1 = reader.GetDouble(0),
-                X2 = reader.GetDouble(1),
-                X3 = reader.GetDouble(2),
-                X4 = reader.GetDouble(3),
-                X5 = reader.GetDouble(4),
-                X6 = reader.GetDouble(5),
-                X7 = reader.GetDouble(6),
-                Enterprise = enterprise
-            };
+                stream.CopyTo(memoryStream);
+                using (var reader = factory(memoryStream))
+                {
+                    var maxRows = GetMaxRows(reader);
+                    var currentRow = 1;
+                    _listener.AcceptMaxRows(maxRows);
+                    var iterator = new ExcelEnterpriseIndexEnumerator(_context);
+                    foreach (var enterpriseIndex in iterator.GetEnterpriseIndices(reader))
+                    {
+                        _context.EnterpriseIndices.Add(enterpriseIndex);
+                        _listener.AcceptCurrentRow(currentRow++);
+                    }
+                    _context.SaveChanges();
+                    _listener.AcceptCurrentRow(currentRow);
+                    _listener.MigrationFinished();
+                }
+            }
         }
 
-        private Enterprise InsertedEnterprise(string id, string name)
+        private static int GetMaxRows(IExcelDataReader reader)
         {
-            var enterprise = new Enterprise {Id = id, Name = name};
-            _context.Enterprises.Add(enterprise);
-            _context.SaveChanges();
-            return enterprise;
+            return reader.AsDataSet().Tables[0].Rows.Count;
         }
     }
 }

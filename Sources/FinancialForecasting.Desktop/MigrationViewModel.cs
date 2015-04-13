@@ -114,8 +114,12 @@ namespace FinancialForecasting.Desktop
         public void AcceptCurrentRow(int rowNumber)
         {
             CurrentRow = rowNumber;
-            if (CurrentRow == NumberOfRows)
-                Indices = _service.GetIndexes();
+        }
+
+        public void MigrationFinished()
+        {
+            Indices = _service.GetIndexes();
+            CurrentRow = 0;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

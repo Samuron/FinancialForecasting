@@ -11,5 +11,8 @@ namespace FinancialForecasting.Migration
 
         [OperationContract(IsOneWay = true)]
         void AcceptCurrentRow(Int32 rowNumber);
+
+        [OperationContract(IsOneWay = true)]
+        void MigrationFinished();
     }
 }
