@@ -20,14 +20,12 @@ namespace FinancialForecasting.Desktop
         private string _filePath;
         private IEnumerable<EnterpriseIndexDto> _indices;
         private int _numberOfRows;
-        private DelegateCommand _selectFileCommand;
-        private DelegateCommand _startMigrationCommand;
 
         public MigrationViewModel()
         {
             _service = new MigrationClient(this);
             SelectFileCommand = new DelegateCommand(SelectFile);
-            StartMigrationCommand = new DelegateCommand(StartMigration, o => FilePath != null);
+            StartMigrationCommand = new DelegateCommand(StartMigration, CanStartMigration);
             Indices = _service.GetIndexes();
             NumberOfRows = 100;
             CurrentRow = 0;
@@ -82,28 +80,34 @@ namespace FinancialForecasting.Desktop
             }
         }
 
-        public DelegateCommand SelectFileCommand
+        public DelegateCommand SelectFileCommand { get; set; }
+
+        public DelegateCommand StartMigrationCommand { get; set; }
+
+        private void StartMigration(object sender)
         {
-            get { return _selectFileCommand; }
-            set
-            {
-                if (Equals(value, _selectFileCommand))
-                    return;
-                _selectFileCommand = value;
-                OnPropertyChanged();
-            }
+            var fileStream = new MemoryStream(File.ReadAllBytes(FilePath));
+            if (Path.GetExtension(FilePath) == ".xls")
+                _service.MigrateXls(fileStream);
+            if (Path.GetExtension(FilePath) == ".xlsx")
+                _service.MigrateXlsx(fileStream);
         }
 
-        public DelegateCommand StartMigrationCommand
+        private bool CanStartMigration(object sender)
         {
-            get { return _startMigrationCommand; }
-            set
+            return FilePath != null;
+        }
+
+        private void SelectFile(object sender)
+        {
+            var dialogWindow = new OpenFileDialog
             {
-                if (Equals(value, _startMigrationCommand))
-                    return;
-                _startMigrationCommand = value;
-                OnPropertyChanged();
-            }
+                Filter = "Excel Files|*.xls;*.xlsx",
+                Title = "Please, select file with migration data"
+            };
+            var dialogResult = dialogWindow.ShowDialog();
+            if (dialogResult.HasValue && dialogResult.Value)
+                FilePath = dialogWindow.FileName;
         }
 
         public void AcceptMaxRows(int maxRows)
@@ -123,23 +127,6 @@ namespace FinancialForecasting.Desktop
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        private void StartMigration(object obj)
-        {
-            var fileStream = new MemoryStream(File.ReadAllBytes(FilePath));
-            if (Path.GetExtension(FilePath) == ".xls")
-                _service.MigrateXls(fileStream);
-            if (Path.GetExtension(FilePath) == ".xlsx")
-                _service.MigrateXlsx(fileStream);
-        }
-
-        private void SelectFile(object sender)
-        {
-            var dialogWindow = new OpenFileDialog {DefaultExt = ".xls;.xlsx"};
-            var dialogResult = dialogWindow.ShowDialog();
-            if (dialogResult.HasValue && dialogResult.Value)
-                FilePath = dialogWindow.FileName;
-        }
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
