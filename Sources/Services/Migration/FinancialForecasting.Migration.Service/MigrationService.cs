@@ -30,12 +30,16 @@ namespace FinancialForecasting.Migration
 
         public IEnumerable<EnterpriseDto> GetEnterprises()
         {
-            return _context.Enterprises.Project().To<EnterpriseDto>().ToList();
+            return _context.Enterprises.AsNoTracking()
+                .Project().To<EnterpriseDto>()
+                .AsParallel().ToArray();
         }
 
         public IEnumerable<EnterpriseIndexDto> GetIndexes()
         {
-            return _context.EnterpriseIndices.Project().To<EnterpriseIndexDto>().ToList();
+            return _context.EnterpriseIndices.AsNoTracking()
+                .Project().To<EnterpriseIndexDto>()
+                .AsParallel().ToArray();
         }
 
         public void InsertEnterprise(EnterpriseDto enterprise)
