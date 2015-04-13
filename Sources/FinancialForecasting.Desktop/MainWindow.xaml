@@ -16,9 +16,9 @@
     </Window.DataContext>
     <TabControl>
         <TabItem Header="Calculation" />
-        <TabItem Header="Data" >
+        <TabItem Header="Data">
             <Grid Height="500" Width="500">
-                <DataGrid ItemsSource="{Binding Migration.Indices}" />
+                <DataGrid ItemsSource="{Binding Migration.Indices}" Style="{StaticResource AzureDataGrid}" />
             </Grid>
         </TabItem>
         <TabItem Header="Migration">
