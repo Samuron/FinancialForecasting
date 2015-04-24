@@ -1,4 +1,6 @@
-﻿namespace FinancialForecasting.Desktop
+﻿using FinancialForecasting.Desktop.ViewModels;
+
+namespace FinancialForecasting.Desktop.Views
 {
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
@@ -9,7 +11,6 @@
         {
             InitializeComponent();
             DataContext = new MainViewModel();
-            ;
         }
     }
 }

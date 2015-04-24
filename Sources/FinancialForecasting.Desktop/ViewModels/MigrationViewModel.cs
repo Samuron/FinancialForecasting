@@ -10,7 +10,7 @@ using FinancialForecasting.Migration;
 using FinancialForecasting.Migration.DataContracts;
 using Microsoft.Win32;
 
-namespace FinancialForecasting.Desktop
+namespace FinancialForecasting.Desktop.ViewModels
 {
     [CallbackBehavior(UseSynchronizationContext = false, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class MigrationViewModel : INotifyPropertyChanged, INotifyMigrationProgress
@@ -80,9 +80,9 @@ namespace FinancialForecasting.Desktop
             }
         }
 
-        public DelegateCommand SelectFileCommand { get; set; }
+        public DelegateCommand SelectFileCommand { get; }
 
-        public DelegateCommand StartMigrationCommand { get; set; }
+        public DelegateCommand StartMigrationCommand { get; }
 
         private void StartMigration(object sender)
         {
