@@ -4,48 +4,38 @@
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-                      xmlns:desktop="clr-namespace:FinancialForecasting.Desktop"
                       xmlns:viewModels="clr-namespace:FinancialForecasting.Desktop.ViewModels"
                       mc:Ignorable="d"
                       GlowBrush="{StaticResource AccentColorBrush}"
                       BorderThickness="1"
                       WindowStartupLocation="CenterScreen"
                       Title="Financial Forecasting"
-                      SizeToContent="WidthAndHeight">
+                      WindowState="Maximized">
     <Window.DataContext>
         <DataTemplate DataType="viewModels:MainViewModel" />
     </Window.DataContext>
     <TabControl>
         <TabItem Header="Calculation">
-            <Grid Margin="10,10,10,20" Height="Auto" Width="500">
+            <Grid Margin="10,10,10,20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="100" />
                     <RowDefinition Height="100" />
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <CheckBox Grid.Row="0" Grid.Column="0" Content="X1"
-                                           IsChecked="{Binding Solving.IsX1Enabled}" />
-                    <CheckBox Grid.Row="0" Grid.Column="1" Content="X2"
-                                           IsChecked="{Binding Solving.IsX2Enabled}" />
-                    <CheckBox Grid.Row="0" Grid.Column="2" Content="X3"
-                                           IsChecked="{Binding Solving.IsX3Enabled}" />
-                    <CheckBox Grid.Row="1" Grid.Column="0" Content="X4"
-                                           IsChecked="{Binding Solving.IsX4Enabled}" />
-                    <CheckBox Grid.Row="1" Grid.Column="1" Content="X5"
-                                           IsChecked="{Binding Solving.IsX5Enabled}" />
-                    <CheckBox Grid.Row="1" Grid.Column="2" Content="C"
-                                           IsChecked="{Binding Solving.IsCEnabled}" />
-                </Grid>
+                <StackPanel Orientation="Vertical">
+                    <CheckBox Content="X1" Margin="0,5"
+                              IsChecked="{Binding Solving.X1Node.IsEnabled}" />
+                    <CheckBox Content="X2" Margin="0,5"
+                              IsChecked="{Binding Solving.X2Node.IsEnabled}" />
+                    <CheckBox Content="X3" Margin="0,5"
+                              IsChecked="{Binding Solving.X3Node.IsEnabled}" />
+                    <CheckBox Content="X4" Margin="0,5"
+                              IsChecked="{Binding Solving.X4Node.IsEnabled}" />
+                    <CheckBox Content="X5" Margin="0,5"
+                              IsChecked="{Binding Solving.X5Node.IsEnabled}" />
+                    <CheckBox Content="C" Margin="0,5"
+                              IsChecked="{Binding Solving.CNode.IsEnabled}" />
+                </StackPanel>
                 <TextBox Text="{Binding Solving.Result, Mode=OneWay}" Grid.Row="1" IsEnabled="False"
                          TextAlignment="Center" FontSize="32" TextWrapping="Wrap" />
                 <Button Grid.Row="2" Content="Solve shit"
@@ -54,12 +44,12 @@
             </Grid>
         </TabItem>
         <TabItem Header="Data">
-            <Grid Height="500" Width="500">
+            <Grid>
                 <DataGrid ItemsSource="{Binding Migration.Indices}" Style="{StaticResource AzureDataGrid}" />
             </Grid>
         </TabItem>
         <TabItem Header="Migration">
-            <Grid Margin="10,10,10,20" Height="300" Width="500">
+            <Grid Margin="10,10,10,20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100" />
                     <RowDefinition Height="100" />

@@ -67,7 +67,7 @@ namespace FinancialForecasting.Desktop.ViewModels
             }
         }
 
-        public String FilePath
+        public string FilePath
         {
             get { return _filePath; }
             set

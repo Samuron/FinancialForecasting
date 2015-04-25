@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using FinancialForecasting.Desktop.Annotations;
 using FinancialForecasting.Desktop.Extensions;
+using FinancialForecasting.Desktop.Models;
 using FinancialForecasting.Migration.DataContracts;
 using LMDotNet;
 
@@ -12,121 +12,52 @@ namespace FinancialForecasting.Desktop.ViewModels
 {
     public class SolvingViewModel : INotifyPropertyChanged
     {
-        private bool _isX1Enabled;
-        private bool _isX2Enabled;
-        private bool _isX3Enabled;
-        private bool _isX4Enabled;
-        private bool _isX5Enabled;
-        private bool _isCEnabled;
-
         public SolvingViewModel()
         {
             SolveCommand = new DelegateCommand(Solve);
+            X1Node.PropertyChanged += NotifyResultChanged;
+            X2Node.PropertyChanged += NotifyResultChanged;
+            X3Node.PropertyChanged += NotifyResultChanged;
+            X4Node.PropertyChanged += NotifyResultChanged;
+            X5Node.PropertyChanged += NotifyResultChanged;
+            CNode.PropertyChanged += NotifyResultChanged;
         }
 
-        public String Result
-        {
-            get
-            {
-                return ExpressionFormatter.FormatWithConst(IsCEnabled, IsX1Enabled, IsX2Enabled, IsX3Enabled,
-                    IsX4Enabled, IsX5Enabled);
-            }
-        }
+        public DelegateCommand SolveCommand { get; }
 
-        public DelegateCommand SolveCommand { get; set; }
+        public EquationNode X1Node { get; set; } = new EquationNode();
 
-        public Boolean IsX1Enabled
-        {
-            get { return _isX1Enabled; }
-            set
-            {
-                if (value == _isX1Enabled)
-                    return;
-                _isX1Enabled = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(Result));
-            }
-        }
+        public EquationNode X2Node { get; set; } = new EquationNode();
 
-        public Boolean IsX2Enabled
-        {
-            get { return _isX2Enabled; }
-            set
-            {
-                if (value == _isX2Enabled)
-                    return;
-                _isX2Enabled = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(Result));
-            }
-        }
+        public EquationNode X3Node { get; set; } = new EquationNode();
 
-        public Boolean IsX3Enabled
-        {
-            get { return _isX3Enabled; }
-            set
-            {
-                if (value == _isX3Enabled)
-                    return;
-                _isX3Enabled = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(Result));
-            }
-        }
+        public EquationNode X4Node { get; set; } = new EquationNode();
 
-        public Boolean IsX4Enabled
-        {
-            get { return _isX4Enabled; }
-            set
-            {
-                if (value == _isX4Enabled)
-                    return;
-                _isX4Enabled = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(Result));
-            }
-        }
+        public EquationNode X5Node { get; set; } = new EquationNode();
 
-        public Boolean IsX5Enabled
-        {
-            get { return _isX5Enabled; }
-            set
-            {
-                if (value == _isX5Enabled)
-                    return;
-                _isX5Enabled = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(Result));
-            }
-        }
+        public EquationNode CNode { get; set; } = new EquationNode();
 
-        public Boolean IsCEnabled
-        {
-            get { return _isCEnabled; }
-            set
-            {
-                if (value == _isCEnabled)
-                    return;
-                _isCEnabled = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(Result));
-            }
-        }
+        public string Result => EquationFormatter.Format(X1Node, X2Node, X3Node, X4Node, X5Node, CNode);
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private void NotifyResultChanged(object sender, PropertyChangedEventArgs args)
+        {
+            OnPropertyChanged(nameof(Result));
+        }
+
         private void Solve(object parameter)
         {
-            var collection = ((IEnumerable<EnterpriseIndexDto>) parameter).AsParallel().ToArray();
-            var solver = new LMSolver();
-            var result = solver.Minimize((p, r) =>
-            {
-                for (var i1 = 0; i1 < collection.Length; i1++)
-                {
-                    var t1 = collection[i1];
-                    r[i1] = -t1.X1 + p[0]*t1.X2 + p[1]*t1.X3 + p[2]*t1.X4 + p[3]*t1.X5 + p[4]*t1.X6 + p[5];
-                }
-            }, new[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, collection.Length);
+            var indices = ((IEnumerable<EnterpriseIndexDto>) parameter);
+            var equationBuilder = new EquationBuilder(X1Node, X2Node, X3Node, X4Node, X5Node, CNode);
+            var result = equationBuilder.Solve(indices);
+
+            X1Node.Factor = result[0];
+            X2Node.Factor = result[1];
+            X3Node.Factor = result[2];
+            X4Node.Factor = result[3];
+            X5Node.Factor = result[4];
+            CNode.Factor = result[5];
         }
 
         [NotifyPropertyChangedInvocator]

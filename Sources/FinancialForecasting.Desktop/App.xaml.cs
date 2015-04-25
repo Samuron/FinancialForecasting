@@ -1,7 +1,4 @@
-﻿using System;
-using System.CodeDom.Compiler;
-using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 
 namespace FinancialForecasting.Desktop
 {
@@ -10,6 +7,5 @@ namespace FinancialForecasting.Desktop
     /// </summary>
     public partial class App : Application
     {
-
     }
 }

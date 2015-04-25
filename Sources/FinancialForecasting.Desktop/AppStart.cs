@@ -36,7 +36,7 @@ namespace FinancialForecasting.Desktop
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            var exception = e.ExceptionObject.ToMaybe().Cast<Object, Exception>();
+            var exception = e.ExceptionObject.ToMaybe().Cast<object, Exception>();
             MessageBox.Show(exception.Select(x => x.ToString()).OrElseDefault());
             MessageBox.Show(exception.Select(x => x.InnerException).Select(x => x.ToString()).OrElseDefault());
         }

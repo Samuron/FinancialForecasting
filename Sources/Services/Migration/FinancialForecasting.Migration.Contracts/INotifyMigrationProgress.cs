@@ -7,10 +7,10 @@ namespace FinancialForecasting.Migration
     public interface INotifyMigrationProgress
     {
         [OperationContract(IsOneWay = true)]
-        void AcceptMaxRows(Int32 maxRows);
+        void AcceptMaxRows(int maxRows);
 
         [OperationContract(IsOneWay = true)]
-        void AcceptCurrentRow(Int32 rowNumber);
+        void AcceptCurrentRow(int rowNumber);
 
         [OperationContract(IsOneWay = true)]
         void MigrationFinished();

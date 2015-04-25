@@ -10,14 +10,14 @@ namespace FinancialForecasting.Migration.Tests
         [TestMethod]
         public void EnterpriseEntityIntegrationTest()
         {
-            string id = String.Empty;
+            string id = string.Empty;
             using (var context = new FinancialForecastingContext())
             {
                 var enterprise = new Enterprise {Id = "TestEnterprise"};
                 context.Enterprises.Add(enterprise);
                 id = enterprise.Id;
 
-                Assert.IsTrue(id != String.Empty);
+                Assert.IsTrue(id != string.Empty);
                 context.SaveChanges();
             }
 
@@ -34,14 +34,14 @@ namespace FinancialForecasting.Migration.Tests
         [TestMethod]
         public void EnterpriseIndexEntityIntegrationTest()
         {
-            string id = String.Empty;
+            string id = string.Empty;
             using (var context = new FinancialForecastingContext())
             {
                 var enterprise = new Enterprise { Name = "TestEnterprise" };
                 context.Enterprises.Add(enterprise);
                 id = enterprise.Id;
 
-                Assert.IsTrue(id != String.Empty);
+                Assert.IsTrue(id != string.Empty);
                 context.SaveChanges();
             }
 

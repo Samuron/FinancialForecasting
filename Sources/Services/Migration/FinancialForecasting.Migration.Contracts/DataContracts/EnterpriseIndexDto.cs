@@ -4,6 +4,8 @@ namespace FinancialForecasting.Migration.DataContracts
     {
         public int Id { get; set; }
 
+        public double Y { get; set; }
+
         public double X1 { get; set; }
 
         public double X2 { get; set; }
@@ -15,8 +17,6 @@ namespace FinancialForecasting.Migration.DataContracts
         public double X5 { get; set; }
 
         public double X6 { get; set; }
-
-        public double X7 { get; set; }
 
         public string EnterpriseId { get; set; }
     }

@@ -9,10 +9,10 @@ namespace FinancialForecasting.Desktop.Clients
     public class MigrationClient : DuplexClientBase<IMigrationService>, IMigrationService
     {
         public MigrationClient(INotifyMigrationProgress listener)
-            :base(new InstanceContext(listener))
+            : base(new InstanceContext(listener))
         {
-            
         }
+
         public IEnumerable<EnterpriseDto> GetEnterprises()
         {
             return Channel.GetEnterprises();
