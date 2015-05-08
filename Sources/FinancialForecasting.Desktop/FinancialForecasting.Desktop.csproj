@@ -132,7 +132,9 @@
     <Compile Include="Extensions\EquationBuilder.cs" />
     <Compile Include="Extensions\EquationFormatter.cs" />
     <Compile Include="Extensions\EquationNodeExtensions.cs" />
+    <Compile Include="Extensions\ModelFactory.cs" />
     <Compile Include="Models\EquationNode.cs" />
+    <Compile Include="Models\EnterpriseModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SolvingViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">

@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using FinancialForecasting.Desktop.Annotations;
 using FinancialForecasting.Desktop.Clients;
+using FinancialForecasting.Desktop.Extensions;
+using FinancialForecasting.Desktop.Models;
 using FinancialForecasting.Migration;
 using FinancialForecasting.Migration.DataContracts;
 using Microsoft.Win32;
@@ -17,6 +20,7 @@ namespace FinancialForecasting.Desktop.ViewModels
     {
         private readonly MigrationClient _service;
         private int _currentRow;
+        private IEnumerable<EnterpriseModel> _enterprises;
         private string _filePath;
         private IEnumerable<EnterpriseIndexDto> _indices;
         private int _numberOfRows;
@@ -27,6 +31,7 @@ namespace FinancialForecasting.Desktop.ViewModels
             SelectFileCommand = new DelegateCommand(SelectFile);
             StartMigrationCommand = new DelegateCommand(StartMigration, CanStartMigration);
             Indices = _service.GetIndexes();
+            Enterprises = new ObservableCollection<EnterpriseModel>(_service.GetEnterprises().AsParallel().Select(ModelFactory.ToModel));
             NumberOfRows = 100;
             CurrentRow = 0;
         }
@@ -51,6 +56,18 @@ namespace FinancialForecasting.Desktop.ViewModels
                 if (Equals(value, _indices))
                     return;
                 _indices = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public IEnumerable<EnterpriseModel> Enterprises
+        {
+            get { return _enterprises; }
+            set
+            {
+                if (Equals(value, _enterprises))
+                    return;
+                _enterprises = value;
                 OnPropertyChanged();
             }
         }
@@ -84,6 +101,24 @@ namespace FinancialForecasting.Desktop.ViewModels
 
         public DelegateCommand StartMigrationCommand { get; }
 
+        public void AcceptMaxRows(int maxRows)
+        {
+            NumberOfRows = maxRows;
+        }
+
+        public void AcceptCurrentRow(int rowNumber)
+        {
+            CurrentRow = rowNumber;
+        }
+
+        public void MigrationFinished()
+        {
+            Indices = _service.GetIndexes();
+            CurrentRow = 0;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private void StartMigration(object sender)
         {
             var fileStream = new MemoryStream(File.ReadAllBytes(FilePath));
@@ -109,24 +144,6 @@ namespace FinancialForecasting.Desktop.ViewModels
             if (dialogResult.HasValue && dialogResult.Value)
                 FilePath = dialogWindow.FileName;
         }
-
-        public void AcceptMaxRows(int maxRows)
-        {
-            NumberOfRows = maxRows;
-        }
-
-        public void AcceptCurrentRow(int rowNumber)
-        {
-            CurrentRow = rowNumber;
-        }
-
-        public void MigrationFinished()
-        {
-            Indices = _service.GetIndexes();
-            CurrentRow = 0;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

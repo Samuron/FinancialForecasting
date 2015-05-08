@@ -5,8 +5,6 @@ using System.Runtime.CompilerServices;
 using FinancialForecasting.Desktop.Annotations;
 using FinancialForecasting.Desktop.Extensions;
 using FinancialForecasting.Desktop.Models;
-using FinancialForecasting.Migration.DataContracts;
-using LMDotNet;
 
 namespace FinancialForecasting.Desktop.ViewModels
 {
@@ -48,7 +46,9 @@ namespace FinancialForecasting.Desktop.ViewModels
 
         private void Solve(object parameter)
         {
-            var indices = ((IEnumerable<EnterpriseIndexDto>) parameter);
+            var data = (MigrationViewModel) parameter;
+            var enabledEnterprises = new HashSet<string>(data.Enterprises.Where(x => x.IsEnabled).Select(x => x.Id));
+            var indices = data.Indices.Where(x => enabledEnterprises.Contains(x.EnterpriseId));
             var equationBuilder = new EquationBuilder(X1Node, X2Node, X3Node, X4Node, X5Node, CNode);
             var result = equationBuilder.Solve(indices);
 

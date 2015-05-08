@@ -5,6 +5,8 @@
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:viewModels="clr-namespace:FinancialForecasting.Desktop.ViewModels"
+                      xmlns:dataContracts="clr-namespace:FinancialForecasting.Migration.DataContracts;assembly=FinancialForecasting.Migration.Contracts"
+                      xmlns:models="clr-namespace:FinancialForecasting.Desktop.Models"
                       mc:Ignorable="d"
                       GlowBrush="{StaticResource AccentColorBrush}"
                       BorderThickness="1"
@@ -22,25 +24,47 @@
                     <RowDefinition Height="100" />
                     <RowDefinition Height="100" />
                 </Grid.RowDefinitions>
-                <StackPanel Orientation="Vertical">
-                    <CheckBox Content="X1" Margin="0,5"
-                              IsChecked="{Binding Solving.X1Node.IsEnabled}" />
-                    <CheckBox Content="X2" Margin="0,5"
-                              IsChecked="{Binding Solving.X2Node.IsEnabled}" />
-                    <CheckBox Content="X3" Margin="0,5"
-                              IsChecked="{Binding Solving.X3Node.IsEnabled}" />
-                    <CheckBox Content="X4" Margin="0,5"
-                              IsChecked="{Binding Solving.X4Node.IsEnabled}" />
-                    <CheckBox Content="X5" Margin="0,5"
-                              IsChecked="{Binding Solving.X5Node.IsEnabled}" />
-                    <CheckBox Content="C" Margin="0,5"
-                              IsChecked="{Binding Solving.CNode.IsEnabled}" />
-                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Vertical">
+                        <TextBlock Text="Nodes" />
+                        <CheckBox Content="X1" Margin="0,5"
+                                  IsChecked="{Binding Solving.X1Node.IsEnabled}" />
+                        <CheckBox Content="X2" Margin="0,5"
+                                  IsChecked="{Binding Solving.X2Node.IsEnabled}" />
+                        <CheckBox Content="X3" Margin="0,5"
+                                  IsChecked="{Binding Solving.X3Node.IsEnabled}" />
+                        <CheckBox Content="X4" Margin="0,5"
+                                  IsChecked="{Binding Solving.X4Node.IsEnabled}" />
+                        <CheckBox Content="X5" Margin="0,5"
+                                  IsChecked="{Binding Solving.X5Node.IsEnabled}" />
+                        <CheckBox Content="C" Margin="0,5"
+                                  IsChecked="{Binding Solving.CNode.IsEnabled}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="Companies" />
+                        <ListBox ItemsSource="{Binding Migration.Enterprises}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="models:EnterpriseModel">
+                                    <CheckBox IsChecked="{Binding IsEnabled}">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Id}" />
+                                            <TextBlock Text="{Binding Name}" />
+                                        </StackPanel>
+                                    </CheckBox>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Grid>
                 <TextBox Text="{Binding Solving.Result, Mode=OneWay}" Grid.Row="1" IsEnabled="False"
                          TextAlignment="Center" FontSize="32" TextWrapping="Wrap" />
                 <Button Grid.Row="2" Content="Solve shit"
                         Command="{Binding Solving.SolveCommand}"
-                        CommandParameter="{Binding Migration.Indices}" />
+                        CommandParameter="{Binding Migration}" />
             </Grid>
         </TabItem>
         <TabItem Header="Data">
