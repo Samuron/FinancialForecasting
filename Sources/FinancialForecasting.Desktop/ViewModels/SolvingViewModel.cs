@@ -11,25 +11,23 @@ namespace FinancialForecasting.Desktop.ViewModels
 {
     public class SolvingViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<EquationNode> Nodes { get; }
-
         public SolvingViewModel()
         {
             SolveCommand = new DelegateCommand(Solve);
-            Nodes = new ObservableCollection<EquationNode>
+            Nodes = new ObservableCollection<EquationNodeModel>
             {
-                new EquationNode("X1"),
-                new EquationNode("X2"),
-                new EquationNode("X3"),
-                new EquationNode("X4"),
-                new EquationNode("X5"),
-                new EquationNode("C"),
+                new EquationNodeModel("Коефіцієнт маневреності", "Км"),
+                new EquationNodeModel("Коефіцієнт абсолютної ліквідності", "Кал"),
+                new EquationNodeModel("Коефіцієнт покриття", "Кп"),
+                new EquationNodeModel("Коефіцієнт швидкої ліквідності", "Кшл"),
+                new EquationNodeModel("Коефіцієнт забезпечення власними коштами", "Кз"),
+                new EquationNodeModel("Константа", "C") {IsVisible = false}
             };
             foreach (var equationNode in Nodes)
-            {
                 equationNode.PropertyChanged += NotifyResultChanged;
-            }
         }
+
+        public ObservableCollection<EquationNodeModel> Nodes { get; }
 
         public DelegateCommand SolveCommand { get; }
 
@@ -46,13 +44,35 @@ namespace FinancialForecasting.Desktop.ViewModels
         {
             var data = (MigrationViewModel) parameter;
             var enabledEnterprises = new HashSet<string>(data.Enterprises.Where(x => x.IsEnabled).Select(x => x.Id));
-            var indices = data.Indices.Where(x => enabledEnterprises.Contains(x.EnterpriseId));
+            var indices = data.Indices.AsParallel().Where(x => enabledEnterprises.Contains(x.EnterpriseId)).ToList();
             var equationBuilder = new EquationBuilder(Nodes.ToArray());
             var result = equationBuilder.Solve(indices);
 
-            for (int i = 0; i < result.Length; i++)
+            var elementIndex = 0;
+            foreach (var node in Nodes)
             {
-                Nodes[i].Factor = result[i];
+                if (!node.IsEnabled)
+                {
+                    elementIndex++;
+                    continue;
+                }
+                node.Factor = result[elementIndex];
+                elementIndex++;
+                if (node.IsK1Enabled)
+                {
+                    node.FactorK1 = result[elementIndex];
+                    elementIndex++;
+                }
+                if (node.IsK2Enabled)
+                {
+                    node.FactorK2 = result[elementIndex];
+                    elementIndex++;
+                }
+                if (node.IsK3Enabled)
+                {
+                    node.FactorK3 = result[elementIndex];
+                    elementIndex++;
+                }
             }
         }
 

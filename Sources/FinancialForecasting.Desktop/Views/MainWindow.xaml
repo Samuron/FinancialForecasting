@@ -5,7 +5,6 @@
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:viewModels="clr-namespace:FinancialForecasting.Desktop.ViewModels"
-                      xmlns:dataContracts="clr-namespace:FinancialForecasting.Migration.DataContracts;assembly=FinancialForecasting.Migration.Contracts"
                       xmlns:models="clr-namespace:FinancialForecasting.Desktop.Models"
                       mc:Ignorable="d"
                       GlowBrush="{StaticResource AccentColorBrush}"
@@ -32,10 +31,25 @@
                     <StackPanel Grid.Column="0" Orientation="Vertical">
                         <TextBlock Text="Nodes" />
                         <ListBox ItemsSource="{Binding Solving.Nodes}">
+                            <ListBox.Resources>
+                                <BooleanToVisibilityConverter x:Key="BoolToVis" />
+                            </ListBox.Resources>
                             <ListBox.ItemTemplate>
-                                <DataTemplate DataType="models:EquationNode">
-                                    <CheckBox IsChecked="{Binding IsEnabled}">
-                                        <TextBlock Text="{Binding Name}" />
+                                <DataTemplate DataType="models:EquationNodeModel">
+                                    <CheckBox Visibility="{Binding IsVisible, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}"
+                                              IsChecked="{Binding IsEnabled}">
+                                        <Grid IsEnabled="{Binding IsEnabled}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="300" />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="5" />
+                                            <StackPanel Grid.Column="1">
+                                                <CheckBox Content="K-1" IsChecked="{Binding IsK1Enabled}" Margin="5" />
+                                                <CheckBox Content="K-2" IsChecked="{Binding IsK2Enabled}" Margin="5" />
+                                                <CheckBox Content="K-3" IsChecked="{Binding IsK3Enabled}" Margin="5" />
+                                            </StackPanel>
+                                        </Grid>
                                     </CheckBox>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -47,7 +61,7 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="models:EnterpriseModel">
                                     <CheckBox IsChecked="{Binding IsEnabled}">
-                                        <StackPanel>
+                                        <StackPanel Margin="5">
                                             <TextBlock Text="{Binding Id}" />
                                             <TextBlock Text="{Binding Name}" />
                                         </StackPanel>
@@ -59,7 +73,7 @@
                 </Grid>
                 <TextBox Text="{Binding Solving.Result, Mode=OneWay}" Grid.Row="1" IsEnabled="False"
                          TextAlignment="Center" FontSize="32" TextWrapping="Wrap" />
-                <Button Grid.Row="2" Content="Solve shit"
+                <Button Grid.Row="2" Content="Розрахувати"
                         Command="{Binding Solving.SolveCommand}"
                         CommandParameter="{Binding Migration}" />
             </Grid>
@@ -79,7 +93,7 @@
                 <ProgressBar Grid.Row="0" Width="500" Height="30"
                              Maximum="{Binding Migration.NumberOfRows}"
                              Value="{Binding Migration.CurrentRow}" />
-                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBox Height="30" Width="470" IsEnabled="False" Text="{Binding Migration.FilePath}" />
                     <Button Height="30" Width="30" Content="..." Command="{Binding Migration.SelectFileCommand}" />
                 </StackPanel>
