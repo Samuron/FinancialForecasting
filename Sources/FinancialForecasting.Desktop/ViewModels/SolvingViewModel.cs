@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -10,32 +11,29 @@ namespace FinancialForecasting.Desktop.ViewModels
 {
     public class SolvingViewModel : INotifyPropertyChanged
     {
+        public ObservableCollection<EquationNode> Nodes { get; }
+
         public SolvingViewModel()
         {
             SolveCommand = new DelegateCommand(Solve);
-            X1Node.PropertyChanged += NotifyResultChanged;
-            X2Node.PropertyChanged += NotifyResultChanged;
-            X3Node.PropertyChanged += NotifyResultChanged;
-            X4Node.PropertyChanged += NotifyResultChanged;
-            X5Node.PropertyChanged += NotifyResultChanged;
-            CNode.PropertyChanged += NotifyResultChanged;
+            Nodes = new ObservableCollection<EquationNode>
+            {
+                new EquationNode("X1"),
+                new EquationNode("X2"),
+                new EquationNode("X3"),
+                new EquationNode("X4"),
+                new EquationNode("X5"),
+                new EquationNode("C"),
+            };
+            foreach (var equationNode in Nodes)
+            {
+                equationNode.PropertyChanged += NotifyResultChanged;
+            }
         }
 
         public DelegateCommand SolveCommand { get; }
 
-        public EquationNode X1Node { get; set; } = new EquationNode();
-
-        public EquationNode X2Node { get; set; } = new EquationNode();
-
-        public EquationNode X3Node { get; set; } = new EquationNode();
-
-        public EquationNode X4Node { get; set; } = new EquationNode();
-
-        public EquationNode X5Node { get; set; } = new EquationNode();
-
-        public EquationNode CNode { get; set; } = new EquationNode();
-
-        public string Result => EquationFormatter.Format(X1Node, X2Node, X3Node, X4Node, X5Node, CNode);
+        public string Result => EquationFormatter.Format(Nodes.ToArray());
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -49,15 +47,13 @@ namespace FinancialForecasting.Desktop.ViewModels
             var data = (MigrationViewModel) parameter;
             var enabledEnterprises = new HashSet<string>(data.Enterprises.Where(x => x.IsEnabled).Select(x => x.Id));
             var indices = data.Indices.Where(x => enabledEnterprises.Contains(x.EnterpriseId));
-            var equationBuilder = new EquationBuilder(X1Node, X2Node, X3Node, X4Node, X5Node, CNode);
+            var equationBuilder = new EquationBuilder(Nodes.ToArray());
             var result = equationBuilder.Solve(indices);
 
-            X1Node.Factor = result[0];
-            X2Node.Factor = result[1];
-            X3Node.Factor = result[2];
-            X4Node.Factor = result[3];
-            X5Node.Factor = result[4];
-            CNode.Factor = result[5];
+            for (int i = 0; i < result.Length; i++)
+            {
+                Nodes[i].Factor = result[i];
+            }
         }
 
         [NotifyPropertyChangedInvocator]

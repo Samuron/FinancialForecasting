@@ -16,7 +16,7 @@ namespace FinancialForecasting.Desktop.Extensions
                     expressionBuilder.AppendSign(enabledNodes[i]);
                 expressionBuilder.AppendNode(enabledNodes[i], i);
             }
-            return expressionBuilder.ToString(0, expressionBuilder.Length - 1);
+            return expressionBuilder.ToString();
         }
 
         private static StringBuilder AppendSign(this StringBuilder expressionBuilder, EquationNode node)
@@ -27,8 +27,8 @@ namespace FinancialForecasting.Desktop.Extensions
         private static StringBuilder AppendNode(this StringBuilder builder, EquationNode node, int index)
         {
             return node.IsDefined
-                ? builder.AppendFormat("{0:0.0000}*x{1}", node.Factor, index + 1)
-                : builder.AppendFormat("a{0}*x{0}", index + 1);
+                ? builder.AppendFormat("{0:0.0000}*{1}", node.Factor, node.Name)
+                : builder.AppendFormat("a{0}*{1}", index + 1, node.Name);
         }
     }
 }

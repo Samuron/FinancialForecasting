@@ -15,25 +15,28 @@ namespace FinancialForecasting.Desktop.Extensions
             _nodes = nodes;
         }
 
-        public double Calculate(EnterpriseIndexDto t, IReadOnlyList<double> p)
+        public double Calculate(double[] t, double[] p)
         {
-            return p[0]*t.X1*_nodes[0].Weight() + p[1]*t.X2*_nodes[1].Weight() + p[2]*t.X3*_nodes[2].Weight() +
-                   p[3]*t.X4*_nodes[3].Weight() + p[4]*t.X5*_nodes[4].Weight() + p[5]*_nodes[5].Weight() - t.Y;
+            var result = -t.Last();
+            for (var i = 0; i < t.Length - 1; i++)
+            {
+                result += p[i]*t[i]*_nodes[i].Weight();
+            }
+            return result;
         }
 
         public double[] Solve(IEnumerable<EnterpriseIndexDto> indices)
         {
-            var indexList = indices.AsParallel().ToList();
+            var indexList = indices.AsParallel().Select(x => x.ToArray()).ToList();
             var solver = new LMSolver();
             var result = solver.Minimize((p, r) =>
             {
                 for (var i = 0; i < indexList.Count; i++)
                 {
-                    var t = indexList[i];
-                    r[i] = Calculate(t, p);
+                    r[i] = Calculate(indexList[i], p);
                 }
             },
-                new[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+                new double[_nodes.Count],
                 indexList.Count);
 
             return result.OptimizedParameters;

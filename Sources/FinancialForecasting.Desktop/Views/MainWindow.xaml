@@ -31,18 +31,15 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Orientation="Vertical">
                         <TextBlock Text="Nodes" />
-                        <CheckBox Content="X1" Margin="0,5"
-                                  IsChecked="{Binding Solving.X1Node.IsEnabled}" />
-                        <CheckBox Content="X2" Margin="0,5"
-                                  IsChecked="{Binding Solving.X2Node.IsEnabled}" />
-                        <CheckBox Content="X3" Margin="0,5"
-                                  IsChecked="{Binding Solving.X3Node.IsEnabled}" />
-                        <CheckBox Content="X4" Margin="0,5"
-                                  IsChecked="{Binding Solving.X4Node.IsEnabled}" />
-                        <CheckBox Content="X5" Margin="0,5"
-                                  IsChecked="{Binding Solving.X5Node.IsEnabled}" />
-                        <CheckBox Content="C" Margin="0,5"
-                                  IsChecked="{Binding Solving.CNode.IsEnabled}" />
+                        <ListBox ItemsSource="{Binding Solving.Nodes}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="models:EquationNode">
+                                    <CheckBox IsChecked="{Binding IsEnabled}">
+                                        <TextBlock Text="{Binding Name}" />
+                                    </CheckBox>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="Companies" />

@@ -9,10 +9,13 @@ namespace FinancialForecasting.Desktop.Models
         private double? _factor;
         private bool _isEnabled;
 
-        public EquationNode()
+        public EquationNode(string name)
         {
+            Name = name;
             _isEnabled = true;
         }
+
+        public string Name { get; }
 
         public bool IsEnabled
         {
