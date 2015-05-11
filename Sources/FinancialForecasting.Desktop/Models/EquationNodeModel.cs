@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using FinancialForecasting.Desktop.Annotations;
 
@@ -32,6 +34,8 @@ namespace FinancialForecasting.Desktop.Models
             get { return _isEnabled; }
             set
             {
+                if (IsYNode)
+                    return;
                 _isEnabled = value;
                 Factor = null;
                 OnPropertyChanged();
@@ -84,6 +88,8 @@ namespace FinancialForecasting.Desktop.Models
             }
         }
 
+        public bool IsYNode { get; set; }
+
         public double FactorK1 { get; set; }
 
         public double FactorK2 { get; set; }
@@ -100,13 +106,14 @@ namespace FinancialForecasting.Desktop.Models
 
         public int RegressionDepth()
         {
+            var regressionCandidates = new List<int> {0};
             if (_isK1Enabled)
-                return 1;
+                regressionCandidates.Add(1);
             if (_isK2Enabled)
-                return 2;
+                regressionCandidates.Add(2);
             if (_isK3Enabled)
-                return 3;
-            return 0;
+                regressionCandidates.Add(3);
+            return regressionCandidates.Max();
         }
 
         public int RequiredParamsCount()

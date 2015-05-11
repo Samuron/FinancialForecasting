@@ -8,20 +8,15 @@ namespace FinancialForecasting.Desktop.Extensions
     {
         public static string Format(params EquationNodeModel[] nodes)
         {
-            var expressionBuilder = new StringBuilder("y=");
+            var expressionBuilder = new StringBuilder("=");
             var enabledNodes = nodes.Where(x => x.IsEnabled).ToList();
             for (var i = 0; i < enabledNodes.Count; i++)
             {
-                if (i != 0)
+                if (i != 0 && !enabledNodes[i].IsYNode)
                     expressionBuilder.Append("+");
                 expressionBuilder.AppendNode(enabledNodes[i], i);
             }
             return expressionBuilder.ToString();
-        }
-
-        private static StringBuilder AppendSign(this StringBuilder expressionBuilder, EquationNodeModel node)
-        {
-            return node.Factor >= 0.0 || !node.IsDefined ? expressionBuilder.Append("+") : expressionBuilder;
         }
 
         private static StringBuilder AppendNode(this StringBuilder builder, EquationNodeModel node, int index)
@@ -31,6 +26,8 @@ namespace FinancialForecasting.Desktop.Extensions
 
         private static StringBuilder AppendDefinedNode(StringBuilder builder, EquationNodeModel node)
         {
+            if (node.IsYNode)
+                return builder.Insert(0, $"{node.ShortName}");
             if (node.IsVisible)
             {
                 builder.Append("[");
@@ -47,6 +44,26 @@ namespace FinancialForecasting.Desktop.Extensions
         }
 
         private static StringBuilder AppendUndefinedNode(StringBuilder builder, EquationNodeModel node, int index)
+        {
+            return node.IsYNode
+                ? PrependUndefinedResultNode(builder, node, index)
+                : AppendUndefinedParamNode(builder, node, index);
+        }
+
+        private static StringBuilder PrependUndefinedResultNode(StringBuilder builder, EquationNodeModel node, int index)
+        {
+            builder.Insert(0, "]");
+            if (node.IsK3Enabled)
+                builder.Insert(0, $"+{node.ShortName}(k-3)");
+            if (node.IsK2Enabled)
+                builder.Insert(0, $"+{node.ShortName}(k-2)");
+            if (node.IsK1Enabled)
+                builder.Insert(0, $"+{node.ShortName}(k-1)");
+            builder.Insert(0, node.ShortName);
+            return builder.Insert(0, "[");
+        }
+
+        private static StringBuilder AppendUndefinedParamNode(StringBuilder builder, EquationNodeModel node, int index)
         {
             builder.Append("[");
             builder.AppendFormat("a({0},0)*{1}", index + 1, node.ShortName);

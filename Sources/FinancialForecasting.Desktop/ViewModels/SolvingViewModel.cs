@@ -13,7 +13,6 @@ namespace FinancialForecasting.Desktop.ViewModels
     {
         public SolvingViewModel()
         {
-            SolveCommand = new DelegateCommand(Solve);
             Nodes = new ObservableCollection<EquationNodeModel>
             {
                 new EquationNodeModel("Коефіцієнт маневреності", "Км"),
@@ -21,8 +20,10 @@ namespace FinancialForecasting.Desktop.ViewModels
                 new EquationNodeModel("Коефіцієнт покриття", "Кп"),
                 new EquationNodeModel("Коефіцієнт швидкої ліквідності", "Кшл"),
                 new EquationNodeModel("Коефіцієнт забезпечення власними коштами", "Кз"),
-                new EquationNodeModel("Константа", "C") {IsVisible = false}
+                new EquationNodeModel("Константа", "C") {IsVisible = false},
+                new EquationNodeModel("Коефіцієнт платоспроможності", "Кпс") {IsYNode = true},
             };
+            SolveCommand = new DelegateCommand(Solve);
             foreach (var equationNode in Nodes)
                 equationNode.PropertyChanged += NotifyResultChanged;
         }
@@ -45,7 +46,7 @@ namespace FinancialForecasting.Desktop.ViewModels
             var data = (MigrationViewModel) parameter;
             var enabledEnterprises = new HashSet<string>(data.Enterprises.Where(x => x.IsEnabled).Select(x => x.Id));
             var indices = data.Indices.AsParallel().Where(x => enabledEnterprises.Contains(x.EnterpriseId)).ToList();
-            var equationBuilder = new EquationBuilder(Nodes.ToArray());
+            var equationBuilder = new EquationSolver(Nodes.ToArray());
             var result = equationBuilder.Solve(indices);
 
             var elementIndex = 0;
@@ -74,6 +75,8 @@ namespace FinancialForecasting.Desktop.ViewModels
                     elementIndex++;
                 }
             }
+
+            var errors = new ModelErrorCalculator(Nodes.ToArray()).Calculate(indices);
         }
 
         [NotifyPropertyChangedInvocator]
