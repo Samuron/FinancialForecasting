@@ -15,12 +15,14 @@
     <Window.DataContext>
         <DataTemplate DataType="viewModels:MainViewModel" />
     </Window.DataContext>
+
     <TabControl>
         <TabItem Header="Calculation">
             <Grid Margin="10,10,10,20">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="100" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="100" />
                 </Grid.RowDefinitions>
                 <Grid>
@@ -36,8 +38,9 @@
                             </ListBox.Resources>
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="models:EquationNodeModel">
-                                    <CheckBox Visibility="{Binding IsVisible, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}"
-                                              IsChecked="{Binding IsEnabled}">
+                                    <CheckBox
+                                        Visibility="{Binding IsVisible, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}"
+                                        IsChecked="{Binding IsEnabled}">
                                         <Grid IsEnabled="{Binding IsEnabled}">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="300" />
@@ -71,9 +74,29 @@
                         </ListBox>
                     </StackPanel>
                 </Grid>
-                <TextBox Text="{Binding Solving.Result, Mode=OneWay}" Grid.Row="1" IsEnabled="False"
+                <TextBox Text="{Binding Solving.Result, Mode=OneWay}" Grid.Row="1" IsEnabled="False" Margin="0,20"
                          TextAlignment="Center" FontSize="32" TextWrapping="Wrap" />
-                <Button Grid.Row="2" Content="Розрахувати"
+                <WrapPanel Grid.Row="2" HorizontalAlignment="Center">
+                    <controls:Tile Title="Коефіцієнт детермінації">
+                        <TextBlock Text="{Binding Solving.ModelErrors.R, StringFormat={}{0:0.0000}}" FontSize="24"/>
+                    </controls:Tile>
+                    <controls:Tile Title="Сума квадратів похибок">
+                        <TextBlock Text="{Binding Solving.ModelErrors.E, StringFormat={}{0:0.0000}}" FontSize="24"/>
+                    </controls:Tile>
+                    <controls:Tile Title="Коефіцієнт Дарбіна-Ватсона">
+                        <TextBlock Text="{Binding Solving.ModelErrors.Dw, StringFormat={}{0:0.0000}}" FontSize="24"/>
+                    </controls:Tile>
+                    <controls:Tile Title="Середній квадрат похибки">
+                        <TextBlock Text="{Binding Solving.ModelErrors.Skp, StringFormat={}{0:0.0000}}" FontSize="24"/>
+                    </controls:Tile>
+                    <controls:Tile Title="Середня абс похибка">
+                        <TextBlock Text="{Binding Solving.ModelErrors.Sapp, StringFormat=P4}" FontSize="24"/>
+                    </controls:Tile>
+                    <controls:Tile Title="Коефіцієнт Тейла">
+                        <TextBlock Text="{Binding Solving.ModelErrors.Theil, StringFormat={}{0:0.0000}}" FontSize="24"/>
+                    </controls:Tile>
+                </WrapPanel>
+                <Button Grid.Row="3" Content="Розрахувати" Margin="0,20"
                         Command="{Binding Solving.SolveCommand}"
                         CommandParameter="{Binding Migration}" />
             </Grid>

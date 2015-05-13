@@ -34,7 +34,7 @@ namespace FinancialForecasting.Desktop.Models
             get { return _isEnabled; }
             set
             {
-                if (IsYNode)
+                if (IsResult)
                     return;
                 _isEnabled = value;
                 Factor = null;
@@ -88,7 +88,7 @@ namespace FinancialForecasting.Desktop.Models
             }
         }
 
-        public bool IsYNode { get; set; }
+        public bool IsResult { get; set; }
 
         public double FactorK1 { get; set; }
 

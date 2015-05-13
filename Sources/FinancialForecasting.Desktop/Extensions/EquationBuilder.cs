@@ -23,7 +23,7 @@ namespace FinancialForecasting.Desktop.Extensions
                     elementIndex++;
                     continue;
                 }
-                if (node.IsYNode)
+                if (node.IsResult)
                 {
                     result -= t[elementIndex];
                     elementIndex++;

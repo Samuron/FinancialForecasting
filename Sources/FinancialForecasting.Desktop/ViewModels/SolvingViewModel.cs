@@ -11,6 +11,8 @@ namespace FinancialForecasting.Desktop.ViewModels
 {
     public class SolvingViewModel : INotifyPropertyChanged
     {
+        private ModelErrors _modelErrors;
+
         public SolvingViewModel()
         {
             Nodes = new ObservableCollection<EquationNodeModel>
@@ -21,7 +23,7 @@ namespace FinancialForecasting.Desktop.ViewModels
                 new EquationNodeModel("Коефіцієнт швидкої ліквідності", "Кшл"),
                 new EquationNodeModel("Коефіцієнт забезпечення власними коштами", "Кз"),
                 new EquationNodeModel("Константа", "C") {IsVisible = false},
-                new EquationNodeModel("Коефіцієнт платоспроможності", "Кпс") {IsYNode = true},
+                new EquationNodeModel("Коефіцієнт платоспроможності", "Кпс") {IsResult = true}
             };
             SolveCommand = new DelegateCommand(Solve);
             foreach (var equationNode in Nodes)
@@ -34,10 +36,23 @@ namespace FinancialForecasting.Desktop.ViewModels
 
         public string Result => EquationFormatter.Format(Nodes.ToArray());
 
+        public ModelErrors ModelErrors
+        {
+            get { return _modelErrors; }
+            set
+            {
+                _modelErrors = value;
+                OnPropertyChanged();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyResultChanged(object sender, PropertyChangedEventArgs args)
         {
+            if (args.PropertyName.Contains("Enabled"))
+                foreach (var equationNode in Nodes)
+                    equationNode.Factor = null;
             OnPropertyChanged(nameof(Result));
         }
 
@@ -76,7 +91,7 @@ namespace FinancialForecasting.Desktop.ViewModels
                 }
             }
 
-            var errors = new ModelErrorCalculator(Nodes.ToArray()).Calculate(indices);
+            ModelErrors = new ModelErrorCalculator(Nodes.ToArray()).Calculate(indices);
         }
 
         [NotifyPropertyChangedInvocator]

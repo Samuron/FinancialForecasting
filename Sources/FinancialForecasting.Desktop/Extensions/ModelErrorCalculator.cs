@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FinancialForecasting.Desktop.Models;
 using FinancialForecasting.Migration.DataContracts;
@@ -9,7 +10,7 @@ namespace FinancialForecasting.Desktop.Extensions
     {
         private readonly EquationBuilder _equationBuilder;
         private readonly EquationNodeModel[] _nodes;
-        private RegressionIndexListFormatter _regressionIndexListFormatter;
+        private readonly RegressionIndexListFormatter _regressionIndexListFormatter;
 
         public ModelErrorCalculator(params EquationNodeModel[] nodes)
         {
@@ -18,35 +19,57 @@ namespace FinancialForecasting.Desktop.Extensions
             _equationBuilder = new EquationBuilder(nodes);
         }
 
-        public ModelErrors Calculate(IReadOnlyCollection<EnterpriseIndexDto> indices)
+        public ModelErrors Calculate(IReadOnlyList<EnterpriseIndexDto> indices)
         {
-            var yAverage = indices.Select(x => x.Y).Average();
+            // TODO: use prepared indexes
             var factors = _nodes.Factors();
+            var formated = _regressionIndexListFormatter.FormatIndexList(indices);
+            var given = indices.Skip(indices.Count - formated.Count).Select(x => x.Y);
+            var calculated = formated.Select(x => _equationBuilder.Calculate(factors, x));
 
-            var epsilons = from index in indices.AsParallel()
-                let givenValue = index.Y
-                let calculatedValue = _equationBuilder.Calculate(factors, index.ToArray())
-                let e = givenValue - calculatedValue
-                select new {E = e, E_ = givenValue - yAverage};
+            var yAverage = given.Average();
+            var count = formated.Count;
 
-            var determination = 1 -
-                                epsilons.Aggregate(0.0, (current, e) => current - e.E*e.E)/
-                                epsilons.Aggregate(0.0, (current, e) => current - e.E_*e.E_);
-            var eSquared = epsilons.Aggregate(0.0, (current, e) => current + e.E*e.E);
-            return new ModelErrors(determination, eSquared);
+            var epsilons = given.Zip(calculated,
+                (givenValue, calculatedValue) =>
+                    new {EpsilonCalculated = givenValue - calculatedValue, EpsilonAverage = givenValue - yAverage});
+
+            var eSquared = epsilons.Sum(x => x.EpsilonCalculated*x.EpsilonCalculated);
+            var eAverage = epsilons.Sum(x => x.EpsilonAverage*x.EpsilonAverage);
+            var determination = 1 - eSquared/eAverage;
+            var dw =
+                epsilons.Skip(1).Zip(epsilons, (e1, e2) => e1.EpsilonCalculated - e2.EpsilonCalculated).Sum(x => x*x)/
+                eSquared;
+
+            var skp = Math.Sqrt(eSquared/count);
+            var sapp = epsilons.Zip(given, (x, y) => Math.Abs(x.EpsilonCalculated)/Math.Abs(y)).Sum()/count;
+            var theil = skp/(Math.Sqrt(given.Sum(x => x*x)/count) + Math.Sqrt(calculated.Sum(x => x*x)/count));
+            return new ModelErrors(determination, eSquared, dw, skp, sapp, theil);
         }
     }
 
     public class ModelErrors
     {
-        public ModelErrors(double r, double e)
+        public ModelErrors(double r, double e, double dw, double skp, double sapp, double theil)
         {
             R = r;
             E = e;
+            Dw = dw;
+            Skp = skp;
+            Sapp = sapp;
+            Theil = theil;
         }
 
         public double R { get; }
 
         public double E { get; }
+
+        public double Dw { get; }
+
+        public double Skp { get; }
+
+        public double Sapp { get; }
+
+        public double Theil { get; }
     }
 }
