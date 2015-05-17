@@ -12,13 +12,14 @@
                       WindowStartupLocation="CenterScreen"
                       Title="Financial Forecasting"
                       Width="1366"
-                      Height="768">
+                      Height="768"
+                      WindowState="Maximized">
     <Window.DataContext>
         <DataTemplate DataType="viewModels:MainViewModel" />
     </Window.DataContext>
 
     <TabControl>
-        <TabItem Header="Calculation">
+        <TabItem Header="Прогноз">
             <Grid Margin="10,10,10,20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -32,7 +33,7 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Orientation="Vertical">
-                        <TextBlock Text="Nodes" />
+                        <TextBlock Text="Параметри" FontSize="24" />
                         <ListBox ItemsSource="{Binding Solving.Nodes}">
                             <ListBox.Resources>
                                 <BooleanToVisibilityConverter x:Key="BoolToVis" />
@@ -60,7 +61,7 @@
                         </ListBox>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
-                        <TextBlock Text="Companies" />
+                        <TextBlock Text="Компанії" FontSize="24" />
                         <ListBox ItemsSource="{Binding Migration.Enterprises}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="models:EnterpriseModel">
@@ -113,7 +114,7 @@
                         CommandParameter="{Binding Migration}" />
             </Grid>
         </TabItem>
-        <TabItem Header="Fuzzy">
+        <TabItem Header="Нечіткі моделі">
             <Grid Margin="10,10,10,20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -162,13 +163,13 @@
                             <TextBlock Text="{Binding Fuzzy.Mamdani.Risk}" FontSize="24" />
                         </StackPanel>
                         <UniformGrid Rows="3" Columns="3" Margin="2">
-                            <TextBlock Text="Модель Альтмана" FontSize="24"/>
+                            <TextBlock Text="Модель Альтмана" FontSize="24" />
                             <TextBlock Text="{Binding Fuzzy.Altman.Factor, StringFormat={}{0:0.0000}}" FontSize="24" />
                             <TextBlock Text="{Binding Fuzzy.Altman.Risk}" FontSize="24" />
-                            <TextBlock Text="Нечітко-множинне" FontSize="24"/>
+                            <TextBlock Text="Нечітко-множинне" FontSize="24" />
                             <TextBlock Text="{Binding Fuzzy.FuzzySet.Factor, StringFormat={}{0:0.0000}}" FontSize="24" />
                             <TextBlock Text="{Binding Fuzzy.FuzzySet.Risk}" FontSize="24" />
-                            <TextBlock Text="Модель Мамдані" FontSize="24"/>
+                            <TextBlock Text="Модель Мамдані" FontSize="24" />
                             <TextBlock Text="{Binding Fuzzy.Mamdani.Factor, StringFormat={}{0:0.0000}}" FontSize="24" />
                             <TextBlock Text="{Binding Fuzzy.Mamdani.Risk}" FontSize="24" />
                         </UniformGrid>
@@ -208,12 +209,12 @@
                         Command="{Binding Fuzzy.LoadBalancesCommand}" />
             </Grid>
         </TabItem>
-        <TabItem Header="Data">
+        <TabItem Header="Дані">
             <Grid>
                 <DataGrid ItemsSource="{Binding Migration.Indices}" Style="{StaticResource AzureDataGrid}" />
             </Grid>
         </TabItem>
-        <TabItem Header="Migration">
+        <TabItem Header="Міграція">
             <Grid Margin="10,10,10,20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100" />
@@ -228,9 +229,9 @@
                     <Button Height="40" Width="40" Content="..." Command="{Binding Migration.SelectFileCommand}" />
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
-                    <Button Content="Start" Margin="10,0" Width="200" Height="40"
+                    <Button Content="Почати" Margin="10,0" Width="200" Height="40"
                             Command="{Binding Migration.StartMigrationCommand}" />
-                    <Button Content="Stop" Margin="10,0" Width="200" Height="40" />
+                    <Button Content="Зупинити" Margin="10,0" Width="200" Height="40" />
                 </StackPanel>
             </Grid>
         </TabItem>
