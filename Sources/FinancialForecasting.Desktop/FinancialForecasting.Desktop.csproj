@@ -24,7 +24,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>17</ApplicationRevision>
+    <ApplicationRevision>20</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -130,6 +130,7 @@
     <Compile Include="Clients\MigrationClient.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="Extensions\EnterpriseIndexExtensions.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\EquationSolver.cs" />
     <Compile Include="Extensions\EquationBuilder.cs" />
     <Compile Include="Extensions\EquationFormatter.cs" />

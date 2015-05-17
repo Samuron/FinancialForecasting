@@ -2,29 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using FinancialForecasting.Desktop.Models;
-using FinancialForecasting.Migration.DataContracts;
 
 namespace FinancialForecasting.Desktop.Extensions
 {
     public class ModelErrorCalculator
     {
         private readonly EquationBuilder _equationBuilder;
-        private readonly EquationNodeModel[] _nodes;
+        private readonly IReadOnlyList<EquationNodeModel> _nodes;
         private readonly RegressionIndexListFormatter _regressionIndexListFormatter;
 
-        public ModelErrorCalculator(params EquationNodeModel[] nodes)
+        public ModelErrorCalculator(IReadOnlyList<EquationNodeModel> nodes)
         {
             _nodes = nodes;
             _regressionIndexListFormatter = new RegressionIndexListFormatter(nodes);
             _equationBuilder = new EquationBuilder(nodes);
         }
 
-        public ModelErrors Calculate(IReadOnlyList<EnterpriseIndexDto> indices)
+        public ModelErrors Calculate(IReadOnlyList<double[]> indices)
         {
             // TODO: use prepared indexes
             var factors = _nodes.Factors();
+            var resultPosition = _nodes.FindIndex(x => x.IsResult);
             var formated = _regressionIndexListFormatter.FormatIndexList(indices);
-            var given = indices.Skip(indices.Count - formated.Count).Select(x => x.Y);
+            var given = indices.Skip(indices.Count - formated.Count).Select(x => x[resultPosition]);
             var calculated = formated.Select(x => _equationBuilder.Calculate(factors, x));
 
             var yAverage = given.Average();
@@ -50,21 +50,26 @@ namespace FinancialForecasting.Desktop.Extensions
 
     public class ModelErrors
     {
-        public ModelErrors(double r, double e, double dw, double skp, double sapp, double theil)
+        public ModelErrors(double determination,
+            double eSquared,
+            double darbinWattson,
+            double skp,
+            double sapp,
+            double theil)
         {
-            R = r;
-            E = e;
-            Dw = dw;
+            Determination = determination;
+            ESquared = eSquared;
+            DarbinWattson = darbinWattson;
             Skp = skp;
             Sapp = sapp;
             Theil = theil;
         }
 
-        public double R { get; }
+        public double Determination { get; }
 
-        public double E { get; }
+        public double ESquared { get; }
 
-        public double Dw { get; }
+        public double DarbinWattson { get; }
 
         public double Skp { get; }
 

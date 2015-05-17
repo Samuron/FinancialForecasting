@@ -14,42 +14,13 @@ namespace FinancialForecasting.Desktop.Extensions
 
         public double Calculate(double[] t, double[] p)
         {
-            var result = 0.0;
-            var elementIndex = 0;
-            foreach (var node in _nodes)
-            {
-                if (!node.IsEnabled)
-                {
-                    elementIndex++;
-                    continue;
-                }
-                if (node.IsResult)
-                {
-                    result -= t[elementIndex];
-                    elementIndex++;
-                }
-                else
-                {
-                    result += p[elementIndex] * t[elementIndex];
-                    elementIndex++;
-                }
-                if (node.IsK1Enabled)
-                {
-                    result += p[elementIndex] * t[elementIndex];
-                    elementIndex++;
-                }
-                if (node.IsK2Enabled)
-                {
-                    result += p[elementIndex] * t[elementIndex];
-                    elementIndex++;
-                }
-                if (node.IsK3Enabled)
-                {
-                    result += p[elementIndex] * t[elementIndex];
-                    elementIndex++;
-                }
-            }
-            return result;
+            return _nodes.Fold(0.0,
+                (x, y) => x + y,
+                (i, _) => 0.0,
+                (i, node) => node.IsResult ? -t[i] : p[i]*t[i],
+                (i, _) => p[i]*t[i],
+                (i, _) => p[i]*t[i],
+                (i, _) => p[i]*t[i]);
         }
     }
 }

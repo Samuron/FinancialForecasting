@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -30,8 +29,8 @@ namespace FinancialForecasting.Desktop.ViewModels
             _service = new MigrationClient(this);
             SelectFileCommand = new DelegateCommand(SelectFile);
             StartMigrationCommand = new DelegateCommand(StartMigration, CanStartMigration);
-            Indices = _service.GetIndexes();
-            Enterprises = new ObservableCollection<EnterpriseModel>(_service.GetEnterprises().AsParallel().Select(ModelFactory.ToModel));
+            Indices = LoadIndices();
+            Enterprises = LoadEnterprises();
             NumberOfRows = 100;
             CurrentRow = 0;
         }
@@ -53,8 +52,6 @@ namespace FinancialForecasting.Desktop.ViewModels
             get { return _indices; }
             set
             {
-                if (Equals(value, _indices))
-                    return;
                 _indices = value;
                 OnPropertyChanged();
             }
@@ -65,8 +62,6 @@ namespace FinancialForecasting.Desktop.ViewModels
             get { return _enterprises; }
             set
             {
-                if (Equals(value, _enterprises))
-                    return;
                 _enterprises = value;
                 OnPropertyChanged();
             }
@@ -113,11 +108,22 @@ namespace FinancialForecasting.Desktop.ViewModels
 
         public void MigrationFinished()
         {
-            Indices = _service.GetIndexes();
+            Indices = LoadIndices();
+            Enterprises = LoadEnterprises();
             CurrentRow = 0;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private IEnumerable<EnterpriseModel> LoadEnterprises()
+        {
+            return _service.GetEnterprises().Select(ModelFactory.ToModel).ToObservable();
+        }
+
+        private IEnumerable<EnterpriseIndexDto> LoadIndices()
+        {
+            return _service.GetIndexes();
+        }
 
         private void StartMigration(object sender)
         {

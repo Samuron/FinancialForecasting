@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using FinancialForecasting.Desktop.Annotations;
 
 namespace FinancialForecasting.Desktop.Models
@@ -14,6 +15,7 @@ namespace FinancialForecasting.Desktop.Models
         private bool _isK1Enabled;
         private bool _isK2Enabled;
         private bool _isK3Enabled;
+        private bool _isVisible;
 
         public EquationNodeModel(string name, string shortName)
         {
@@ -27,7 +29,15 @@ namespace FinancialForecasting.Desktop.Models
 
         public string ShortName { get; }
 
-        public bool IsVisible { get; set; }
+        public bool IsVisible
+        {
+            get { return _isVisible; }
+            set
+            {
+                _isVisible = value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool IsEnabled
         {
@@ -50,6 +60,12 @@ namespace FinancialForecasting.Desktop.Models
             set
             {
                 _factor = value;
+                if (value == null)
+                {
+                    FactorK1 = default(double);
+                    FactorK2 = default(double);
+                    FactorK3 = default(double);
+                }
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsDefined));
             }

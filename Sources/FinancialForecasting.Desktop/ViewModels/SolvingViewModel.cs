@@ -34,7 +34,7 @@ namespace FinancialForecasting.Desktop.ViewModels
 
         public DelegateCommand SolveCommand { get; }
 
-        public string Result => EquationFormatter.Format(Nodes.ToArray());
+        public string Result => EquationFormatter.Format(Nodes.Where(x => x.IsEnabled).ToList());
 
         public ModelErrors ModelErrors
         {
@@ -60,8 +60,9 @@ namespace FinancialForecasting.Desktop.ViewModels
         {
             var data = (MigrationViewModel) parameter;
             var enabledEnterprises = new HashSet<string>(data.Enterprises.Where(x => x.IsEnabled).Select(x => x.Id));
-            var indices = data.Indices.AsParallel().Where(x => enabledEnterprises.Contains(x.EnterpriseId)).ToList();
-            var equationBuilder = new EquationSolver(Nodes.ToArray());
+            var indices = data.Indices.AsParallel().Where(x => enabledEnterprises.Contains(x.EnterpriseId)).Select(x=>x.ToArray()).ToList();
+
+            var equationBuilder = new EquationSolver(Nodes);
             var result = equationBuilder.Solve(indices);
 
             var elementIndex = 0;
@@ -91,7 +92,7 @@ namespace FinancialForecasting.Desktop.ViewModels
                 }
             }
 
-            ModelErrors = new ModelErrorCalculator(Nodes.ToArray()).Calculate(indices);
+            ModelErrors = new ModelErrorCalculator(Nodes).Calculate(indices);
         }
 
         [NotifyPropertyChangedInvocator]

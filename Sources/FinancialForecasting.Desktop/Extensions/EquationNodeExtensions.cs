@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FinancialForecasting.Desktop.Models;
 
@@ -7,16 +6,11 @@ namespace FinancialForecasting.Desktop.Extensions
 {
     public static class EquationNodeExtensions
     {
-        public static double Weight(this EquationNodeModel node)
-        {
-            return node.IsEnabled ? 1.0 : 0.0;
-        }
-
-        public static double[] Factors(this IReadOnlyList<EquationNodeModel> nodes)
+        public static double[] Factors(this IEnumerable<EquationNodeModel> nodes)
         {
             return nodes.SelectMany(node =>
             {
-                var list = new List<double> {node.Factor ?? double.NaN};
+                var list = new List<double> {node.Factor ?? 0.0};
                 if (node.IsK1Enabled)
                     list.Add(node.FactorK1);
                 if (node.IsK2Enabled)

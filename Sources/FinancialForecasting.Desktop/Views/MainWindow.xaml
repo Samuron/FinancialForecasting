@@ -21,9 +21,9 @@
             <Grid Margin="10,10,10,20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="160" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="100" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -39,7 +39,7 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="models:EquationNodeModel">
                                     <CheckBox
-                                        Visibility="{Binding IsVisible, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}"
+                                        Visibility="{Binding IsVisible, Converter={StaticResource BoolToVis}, UpdateSourceTrigger=PropertyChanged}"
                                         IsChecked="{Binding IsEnabled}">
                                         <Grid IsEnabled="{Binding IsEnabled}">
                                             <Grid.ColumnDefinitions>
@@ -47,7 +47,7 @@
                                                 <ColumnDefinition />
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="5" />
-                                            <StackPanel Grid.Column="1">
+                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
                                                 <CheckBox Content="K-1" IsChecked="{Binding IsK1Enabled}" Margin="5" />
                                                 <CheckBox Content="K-2" IsChecked="{Binding IsK2Enabled}" Margin="5" />
                                                 <CheckBox Content="K-3" IsChecked="{Binding IsK3Enabled}" Margin="5" />
@@ -64,8 +64,8 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="models:EnterpriseModel">
                                     <CheckBox IsChecked="{Binding IsEnabled}">
-                                        <StackPanel Margin="5">
-                                            <TextBlock Text="{Binding Id}" />
+                                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                                            <TextBlock Text="{Binding Id}" Margin="0,0,5,0" />
                                             <TextBlock Text="{Binding Name}" />
                                         </StackPanel>
                                     </CheckBox>
@@ -77,23 +77,30 @@
                 <TextBox Text="{Binding Solving.Result, Mode=OneWay}" Grid.Row="1" IsEnabled="False" Margin="0,20"
                          TextAlignment="Center" FontSize="32" TextWrapping="Wrap" />
                 <WrapPanel Grid.Row="2" HorizontalAlignment="Center">
+                    <WrapPanel.Resources>
+                        <Style TargetType="controls:Tile">
+                            <Setter Property="Height" Value="80" />
+                            <Setter Property="Width" Value="160" />
+                            <Setter Property="VerticalContentAlignment" Value="Top" />
+                        </Style>
+                    </WrapPanel.Resources>
                     <controls:Tile Title="Коефіцієнт детермінації">
-                        <TextBlock Text="{Binding Solving.ModelErrors.R, StringFormat={}{0:0.0000}}" FontSize="24"/>
+                        <TextBlock Text="{Binding Solving.ModelErrors.Determination, StringFormat={}{0:0.0000}}" FontSize="24" />
                     </controls:Tile>
                     <controls:Tile Title="Сума квадратів похибок">
-                        <TextBlock Text="{Binding Solving.ModelErrors.E, StringFormat={}{0:0.0000}}" FontSize="24"/>
+                        <TextBlock Text="{Binding Solving.ModelErrors.ESquared, StringFormat={}{0:0.0000}}" FontSize="24" />
                     </controls:Tile>
                     <controls:Tile Title="Коефіцієнт Дарбіна-Ватсона">
-                        <TextBlock Text="{Binding Solving.ModelErrors.Dw, StringFormat={}{0:0.0000}}" FontSize="24"/>
+                        <TextBlock Text="{Binding Solving.ModelErrors.DarbinWattson, StringFormat={}{0:0.0000}}" FontSize="24" />
                     </controls:Tile>
                     <controls:Tile Title="Середній квадрат похибки">
-                        <TextBlock Text="{Binding Solving.ModelErrors.Skp, StringFormat={}{0:0.0000}}" FontSize="24"/>
+                        <TextBlock Text="{Binding Solving.ModelErrors.Skp, StringFormat={}{0:0.0000}}" FontSize="24" />
                     </controls:Tile>
                     <controls:Tile Title="Середня абс похибка">
-                        <TextBlock Text="{Binding Solving.ModelErrors.Sapp, StringFormat=P4}" FontSize="24"/>
+                        <TextBlock Text="{Binding Solving.ModelErrors.Sapp, StringFormat=P4}" FontSize="24" />
                     </controls:Tile>
                     <controls:Tile Title="Коефіцієнт Тейла">
-                        <TextBlock Text="{Binding Solving.ModelErrors.Theil, StringFormat={}{0:0.0000}}" FontSize="24"/>
+                        <TextBlock Text="{Binding Solving.ModelErrors.Theil, StringFormat={}{0:0.0000}}" FontSize="24" />
                     </controls:Tile>
                 </WrapPanel>
                 <Button Grid.Row="3" Content="Розрахувати" Margin="0,20"

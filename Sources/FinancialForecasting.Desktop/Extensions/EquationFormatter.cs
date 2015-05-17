@@ -1,21 +1,22 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Windows;
 using FinancialForecasting.Desktop.Models;
 
 namespace FinancialForecasting.Desktop.Extensions
 {
     public static class EquationFormatter
     {
-        public static string Format(params EquationNodeModel[] nodes)
+        public static string Format(IReadOnlyList<EquationNodeModel> nodes)
         {
             var resultNode = nodes.First(x => x.IsResult);
             var expressionBuilder = new StringBuilder($"{resultNode.ShortName}=");
-            var enabledNodes = nodes.Where(x => x.IsEnabled).ToList();
-            for (var i = 0; i < enabledNodes.Count; i++)
+            for (var i = 0; i < nodes.Count; i++)
             {
-                if (i != 0 && !enabledNodes[i].IsResult)
+                if (i != 0 && !nodes[i].IsResult)
                     expressionBuilder.Append("+");
-                expressionBuilder.AppendNode(enabledNodes[i], i);
+                expressionBuilder.AppendNode(nodes[i], i);
             }
             return expressionBuilder.ToString();
         }
