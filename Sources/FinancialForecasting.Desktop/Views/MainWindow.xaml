@@ -175,42 +175,12 @@
                         </UniformGrid>
                     </controls:FlipView.Items>
                 </controls:FlipView>
-                <!--<WrapPanel Grid.Row="1" HorizontalAlignment="Center">
-                    <WrapPanel.Resources>
-                        <Style TargetType="controls:Tile">
-                            <Setter Property="Width" Value="350" />
-                            <Setter Property="Height" Value="200" />
-                            <Setter Property="TitleFontSize" Value="24" />
-                        </Style>
-                        <Style TargetType="StackPanel">
-                            <Setter Property="Orientation" Value="Vertical" />
-                        </Style>
-                    </WrapPanel.Resources>
-                    <controls:Tile Title="Модель Альтмана">
-                        <StackPanel>
-                            <TextBlock Text="{Binding Fuzzy.Altman.Factor, StringFormat={}{0:0.0000}}" FontSize="24" />
-                            <TextBlock Text="{Binding Fuzzy.Altman.Risk}" FontSize="24" />
-                        </StackPanel>
-                    </controls:Tile>
-                    <controls:Tile Title="Нечітке множинне виведення">
-                        <StackPanel>
-                            <TextBlock Text="{Binding Fuzzy.FuzzySet.Factor, StringFormat={}{0:0.0000}}" FontSize="24" />
-                            <TextBlock Text="{Binding Fuzzy.FuzzySet.Risk}" FontSize="24" />
-                        </StackPanel>
-                    </controls:Tile>
-                    <controls:Tile Title="Модель Мамдані">
-                        <StackPanel>
-                            <TextBlock Text="{Binding Fuzzy.Mamdani.Factor, StringFormat={}{0:0.0000}}" FontSize="24" />
-                            <TextBlock Text="{Binding Fuzzy.Mamdani.Risk}" FontSize="24" />
-                        </StackPanel>
-                    </controls:Tile>
-                </WrapPanel>-->
                 <Button Grid.Row="2" Height="40" Margin="0,20" Content="Розрахувати"
                         Command="{Binding Fuzzy.LoadBalancesCommand}" />
             </Grid>
         </TabItem>
         <TabItem Header="Дані">
-            <Grid>
+            <Grid Margin="10,10,10,20">
                 <DataGrid ItemsSource="{Binding Migration.Indices}" Style="{StaticResource AzureDataGrid}" />
             </Grid>
         </TabItem>
