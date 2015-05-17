@@ -24,8 +24,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>20</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>23</ApplicationRevision>
+    <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -138,8 +138,11 @@
     <Compile Include="Extensions\ModelErrorCalculator.cs" />
     <Compile Include="Extensions\ModelFactory.cs" />
     <Compile Include="Extensions\RegressionIndexListFormatter.cs" />
+    <Compile Include="Extensions\RiskExtensions.cs" />
     <Compile Include="Models\EquationNodeModel.cs" />
     <Compile Include="Models\EnterpriseModel.cs" />
+    <Compile Include="Models\FuzzyResultModel.cs" />
+    <Compile Include="ViewModels\FuzzyViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SolvingViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
@@ -181,6 +184,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Services\Equation\FinancialForecasting.Equation.Fuzzy\FinancialForecasting.Equation.Fuzzy.csproj">
+      <Project>{3EC2609E-4B64-4ECC-A380-DBBD8CD956CF}</Project>
+      <Name>FinancialForecasting.Equation.Fuzzy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Services\Migration\FinancialForecasting.Migration.Contracts\FinancialForecasting.Migration.Contracts.csproj">
       <Project>{41A813B7-11E2-4635-BB6D-D5222076DEFC}</Project>
       <Name>FinancialForecasting.Migration.Contracts</Name>
@@ -207,13 +214,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="lmfit32\lmfit.dll">
+    <Content Include="lmfit32\lmfit.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <Content Include="lmfit32\lmfit.pdb" />
-    <None Include="lmfit64\lmfit.dll">
+    <Content Include="lmfit64\lmfit.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <Content Include="lmfit64\lmfit.pdb" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

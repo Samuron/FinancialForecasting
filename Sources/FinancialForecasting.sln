@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.Equati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.Equation.Contracts", "Services\Equation\FinancialForecasting.Equation.Contracts\FinancialForecasting.Equation.Contracts.csproj", "{BAAFAC19-7795-4B26-A87E-97534DC3E079}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.Equation.Fuzzy", "Services\Equation\FinancialForecasting.Equation.Fuzzy\FinancialForecasting.Equation.Fuzzy.csproj", "{3EC2609E-4B64-4ECC-A380-DBBD8CD956CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{BAAFAC19-7795-4B26-A87E-97534DC3E079}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAAFAC19-7795-4B26-A87E-97534DC3E079}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAAFAC19-7795-4B26-A87E-97534DC3E079}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EC2609E-4B64-4ECC-A380-DBBD8CD956CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EC2609E-4B64-4ECC-A380-DBBD8CD956CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EC2609E-4B64-4ECC-A380-DBBD8CD956CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EC2609E-4B64-4ECC-A380-DBBD8CD956CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,5 +76,6 @@ Global
 		{8D29DE3C-8FAE-4C94-ABE1-85D861352455} = {BB23DDBF-9A37-48DF-84AC-89DE09528F4F}
 		{5044132D-1485-40BA-8762-85BF14AFC07C} = {8D29DE3C-8FAE-4C94-ABE1-85D861352455}
 		{BAAFAC19-7795-4B26-A87E-97534DC3E079} = {8D29DE3C-8FAE-4C94-ABE1-85D861352455}
+		{3EC2609E-4B64-4ECC-A380-DBBD8CD956CF} = {8D29DE3C-8FAE-4C94-ABE1-85D861352455}
 	EndGlobalSection
 EndGlobal

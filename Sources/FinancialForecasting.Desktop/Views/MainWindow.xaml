@@ -11,7 +11,8 @@
                       BorderThickness="1"
                       WindowStartupLocation="CenterScreen"
                       Title="Financial Forecasting"
-                      WindowState="Maximized">
+                      Width="1366"
+                      Height="768">
     <Window.DataContext>
         <DataTemplate DataType="viewModels:MainViewModel" />
     </Window.DataContext>
@@ -21,9 +22,9 @@
             <Grid Margin="10,10,10,20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="160" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -79,19 +80,22 @@
                 <WrapPanel Grid.Row="2" HorizontalAlignment="Center">
                     <WrapPanel.Resources>
                         <Style TargetType="controls:Tile">
-                            <Setter Property="Height" Value="80" />
-                            <Setter Property="Width" Value="160" />
+                            <Setter Property="Height" Value="100" />
+                            <Setter Property="Width" Value="180" />
                             <Setter Property="VerticalContentAlignment" Value="Top" />
                         </Style>
                     </WrapPanel.Resources>
                     <controls:Tile Title="Коефіцієнт детермінації">
-                        <TextBlock Text="{Binding Solving.ModelErrors.Determination, StringFormat={}{0:0.0000}}" FontSize="24" />
+                        <TextBlock Text="{Binding Solving.ModelErrors.Determination, StringFormat={}{0:0.0000}}"
+                                   FontSize="24" />
                     </controls:Tile>
                     <controls:Tile Title="Сума квадратів похибок">
-                        <TextBlock Text="{Binding Solving.ModelErrors.ESquared, StringFormat={}{0:0.0000}}" FontSize="24" />
+                        <TextBlock Text="{Binding Solving.ModelErrors.ESquared, StringFormat={}{0:0.0000}}"
+                                   FontSize="24" />
                     </controls:Tile>
                     <controls:Tile Title="Коефіцієнт Дарбіна-Ватсона">
-                        <TextBlock Text="{Binding Solving.ModelErrors.DarbinWattson, StringFormat={}{0:0.0000}}" FontSize="24" />
+                        <TextBlock Text="{Binding Solving.ModelErrors.DarbinWattson, StringFormat={}{0:0.0000}}"
+                                   FontSize="24" />
                     </controls:Tile>
                     <controls:Tile Title="Середній квадрат похибки">
                         <TextBlock Text="{Binding Solving.ModelErrors.Skp, StringFormat={}{0:0.0000}}" FontSize="24" />
@@ -104,8 +108,104 @@
                     </controls:Tile>
                 </WrapPanel>
                 <Button Grid.Row="3" Content="Розрахувати" Margin="0,20"
+                        Height="40"
                         Command="{Binding Solving.SolveCommand}"
                         CommandParameter="{Binding Migration}" />
+            </Grid>
+        </TabItem>
+        <TabItem Header="Fuzzy">
+            <Grid Margin="10,10,10,20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <UniformGrid Rows="2" Columns="3" Width="750">
+                    <UniformGrid.Resources>
+                        <Style TargetType="controls:Tile">
+                            <Setter Property="Height" Value="150" />
+                            <Setter Property="Width" Value="250" />
+                            <Setter Property="VerticalContentAlignment" Value="Top" />
+                        </Style>
+                    </UniformGrid.Resources>
+                    <controls:Tile Title="Коефіцієнт автономії">
+                        <TextBlock Text="{Binding Fuzzy.Parameters[0], StringFormat={}{0:0.0000}}" FontSize="24" />
+                    </controls:Tile>
+                    <controls:Tile Title="Коефіцієнт забезпечення">
+                        <TextBlock Text="{Binding Fuzzy.Parameters[1], StringFormat={}{0:0.0000}}" FontSize="24" />
+                    </controls:Tile>
+                    <controls:Tile Title="Коефіцієнт поточної ліквідності">
+                        <TextBlock Text="{Binding Fuzzy.Parameters[2], StringFormat={}{0:0.0000}}" FontSize="24" />
+                    </controls:Tile>
+                    <controls:Tile Title="Коефіцієнт абсолютної ліквідності">
+                        <TextBlock Text="{Binding Fuzzy.Parameters[3], StringFormat={}{0:0.0000}}" FontSize="24" />
+                    </controls:Tile>
+                    <controls:Tile Title="Коефіцієнт оборотності за рік">
+                        <TextBlock Text="{Binding Fuzzy.Parameters[4], StringFormat={}{0:0.0000}}" FontSize="24" />
+                    </controls:Tile>
+                    <controls:Tile Title="Рентабельність капіталу">
+                        <TextBlock Text="{Binding Fuzzy.Parameters[5], StringFormat={}{0:0.0000}}" FontSize="24" />
+                    </controls:Tile>
+                </UniformGrid>
+                <controls:FlipView Grid.Row="1" Width="750" Margin="10" SelectionChanged="Selector_OnSelectionChanged">
+                    <controls:FlipView.Items>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Fuzzy.Altman.Factor, StringFormat={}{0:0.0000}}" FontSize="24" />
+                            <TextBlock Text="{Binding Fuzzy.Altman.Risk}" FontSize="24" />
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Fuzzy.FuzzySet.Factor, StringFormat={}{0:0.0000}}" FontSize="24" />
+                            <TextBlock Text="{Binding Fuzzy.FuzzySet.Risk}" FontSize="24" />
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Fuzzy.Mamdani.Factor, StringFormat={}{0:0.0000}}" FontSize="24" />
+                            <TextBlock Text="{Binding Fuzzy.Mamdani.Risk}" FontSize="24" />
+                        </StackPanel>
+                        <UniformGrid Rows="3" Columns="3" Margin="2">
+                            <TextBlock Text="Модель Альтмана" FontSize="24"/>
+                            <TextBlock Text="{Binding Fuzzy.Altman.Factor, StringFormat={}{0:0.0000}}" FontSize="24" />
+                            <TextBlock Text="{Binding Fuzzy.Altman.Risk}" FontSize="24" />
+                            <TextBlock Text="Нечітко-множинне" FontSize="24"/>
+                            <TextBlock Text="{Binding Fuzzy.FuzzySet.Factor, StringFormat={}{0:0.0000}}" FontSize="24" />
+                            <TextBlock Text="{Binding Fuzzy.FuzzySet.Risk}" FontSize="24" />
+                            <TextBlock Text="Модель Мамдані" FontSize="24"/>
+                            <TextBlock Text="{Binding Fuzzy.Mamdani.Factor, StringFormat={}{0:0.0000}}" FontSize="24" />
+                            <TextBlock Text="{Binding Fuzzy.Mamdani.Risk}" FontSize="24" />
+                        </UniformGrid>
+                    </controls:FlipView.Items>
+                </controls:FlipView>
+                <!--<WrapPanel Grid.Row="1" HorizontalAlignment="Center">
+                    <WrapPanel.Resources>
+                        <Style TargetType="controls:Tile">
+                            <Setter Property="Width" Value="350" />
+                            <Setter Property="Height" Value="200" />
+                            <Setter Property="TitleFontSize" Value="24" />
+                        </Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Orientation" Value="Vertical" />
+                        </Style>
+                    </WrapPanel.Resources>
+                    <controls:Tile Title="Модель Альтмана">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Fuzzy.Altman.Factor, StringFormat={}{0:0.0000}}" FontSize="24" />
+                            <TextBlock Text="{Binding Fuzzy.Altman.Risk}" FontSize="24" />
+                        </StackPanel>
+                    </controls:Tile>
+                    <controls:Tile Title="Нечітке множинне виведення">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Fuzzy.FuzzySet.Factor, StringFormat={}{0:0.0000}}" FontSize="24" />
+                            <TextBlock Text="{Binding Fuzzy.FuzzySet.Risk}" FontSize="24" />
+                        </StackPanel>
+                    </controls:Tile>
+                    <controls:Tile Title="Модель Мамдані">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Fuzzy.Mamdani.Factor, StringFormat={}{0:0.0000}}" FontSize="24" />
+                            <TextBlock Text="{Binding Fuzzy.Mamdani.Risk}" FontSize="24" />
+                        </StackPanel>
+                    </controls:Tile>
+                </WrapPanel>-->
+                <Button Grid.Row="2" Height="40" Margin="0,20" Content="Розрахувати"
+                        Command="{Binding Fuzzy.LoadBalancesCommand}" />
             </Grid>
         </TabItem>
         <TabItem Header="Data">
@@ -120,17 +220,17 @@
                     <RowDefinition Height="100" />
                     <RowDefinition Height="100" />
                 </Grid.RowDefinitions>
-                <ProgressBar Grid.Row="0" Width="500" Height="30"
+                <ProgressBar Grid.Row="0" Width="500" Height="40"
                              Maximum="{Binding Migration.NumberOfRows}"
                              Value="{Binding Migration.CurrentRow}" />
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBox Height="30" Width="470" IsEnabled="False" Text="{Binding Migration.FilePath}" />
-                    <Button Height="30" Width="30" Content="..." Command="{Binding Migration.SelectFileCommand}" />
+                    <TextBox Height="40" Width="460" IsEnabled="False" Text="{Binding Migration.FilePath}" />
+                    <Button Height="40" Width="40" Content="..." Command="{Binding Migration.SelectFileCommand}" />
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
-                    <Button Content="Start" Margin="10,0" Width="100" Height="30"
+                    <Button Content="Start" Margin="10,0" Width="200" Height="40"
                             Command="{Binding Migration.StartMigrationCommand}" />
-                    <Button Content="Stop" Margin="10,0" Width="100" Height="30" />
+                    <Button Content="Stop" Margin="10,0" Width="200" Height="40" />
                 </StackPanel>
             </Grid>
         </TabItem>
