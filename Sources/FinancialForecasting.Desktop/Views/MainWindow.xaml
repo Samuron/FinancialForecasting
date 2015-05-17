@@ -76,8 +76,8 @@
                         </ListBox>
                     </StackPanel>
                 </Grid>
-                <TextBox Text="{Binding Solving.Result, Mode=OneWay}" Grid.Row="1" IsEnabled="False" Margin="0,20"
-                         TextAlignment="Center" FontSize="32" TextWrapping="Wrap" />
+                <TextBox Text="{Binding Solving.Result, Mode=OneWay}" Grid.Row="1" IsEnabled="False" Margin="0,5"
+                         TextAlignment="Center" FontSize="28" TextWrapping="Wrap" />
                 <WrapPanel Grid.Row="2" HorizontalAlignment="Center">
                     <WrapPanel.Resources>
                         <Style TargetType="controls:Tile">
