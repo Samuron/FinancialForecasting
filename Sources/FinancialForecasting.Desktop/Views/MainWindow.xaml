@@ -19,7 +19,7 @@
     </Window.DataContext>
 
     <TabControl>
-        <TabItem Header="Прогноз">
+        <TabItem Header="Регрессійні моделі">
             <Grid Margin="10,10,10,20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
