@@ -27,5 +27,10 @@ namespace FinancialForecasting.Equation
 
             return optimizationResult.OptimizedParameters;
         }
+
+        public ModelErrors Calculate(IReadOnlyList<double[]> indices)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
