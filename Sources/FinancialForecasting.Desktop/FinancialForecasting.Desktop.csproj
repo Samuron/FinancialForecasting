@@ -28,7 +28,7 @@
     <ProductName>FinancialForecasting</ProductName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -236,4 +236,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="BeforePublish">
+    <Error Condition="'$(Configuration)' != 'Release' Or '$(PlatformName)' != 'AnyCPU'" Text="You attempted to publish a configuration that is not Release and AnyCPU architecture!" />
+  </Target>
 </Project>
