@@ -26,6 +26,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>https://raw.githubusercontent.com/Samuron/FinancialForecasting/master/installer/</InstallUrl>
     <ProductName>FinancialForecasting</ProductName>
+    <PublisherName>Samuron</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <ApplicationRevision>1</ApplicationRevision>
