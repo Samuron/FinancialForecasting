@@ -11,7 +11,9 @@ namespace FinancialForecasting.Desktop.ViewModels
 {
     public class SolvingViewModel : INotifyPropertyChanged
     {
+        private bool _isFlyoutOpen;
         private ModelErrors _modelErrors;
+        private string _result;
 
         public SolvingViewModel()
         {
@@ -25,16 +27,33 @@ namespace FinancialForecasting.Desktop.ViewModels
                 new EquationNodeModel("Константа", "C") {IsVisible = false},
                 new EquationNodeModel("Коефіцієнт платоспроможності", "Кпс") {IsResult = true}
             };
-            SolveCommand = new DelegateCommand(Solve);
             foreach (var equationNode in Nodes)
                 equationNode.PropertyChanged += NotifyResultChanged;
+            Result = EquationFormatter.Format(Nodes);
+            SolveCommand = new DelegateCommand(Solve);
+            PrepareForecastCommand = new DelegateCommand(PrepareForecastData);
+            ForecastCommand = new DelegateCommand(Forecast);
         }
+
+        public DelegateCommand ForecastCommand { get; }
 
         public ObservableCollection<EquationNodeModel> Nodes { get; }
 
         public DelegateCommand SolveCommand { get; }
 
-        public string Result => EquationFormatter.Format(Nodes.Where(x => x.IsEnabled).ToList());
+        public DelegateCommand PrepareForecastCommand { get; }
+
+        public string Result
+        {
+            get { return _result; }
+            set
+            {
+                if (value == _result)
+                    return;
+                _result = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ModelErrors ModelErrors
         {
@@ -46,21 +65,42 @@ namespace FinancialForecasting.Desktop.ViewModels
             }
         }
 
+        public bool IsFlyoutOpen
+        {
+            get { return _isFlyoutOpen; }
+            set
+            {
+                _isFlyoutOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void Forecast(object parameter)
+        {
+            var resultNode = Nodes.First(x => x.IsResult);
+            var forecast = Nodes.Where(x => x.IsEnabled).Select(x => x.GetForecast()).Sum();
+            Result = $"{resultNode.ShortName}={forecast.ToString("0.0000")} ({ BankruptcyDecision.GetDecision(forecast)})";
+        }
 
         private void NotifyResultChanged(object sender, PropertyChangedEventArgs args)
         {
             if (args.PropertyName.Contains("Enabled"))
                 foreach (var equationNode in Nodes)
                     equationNode.Factor = null;
-            OnPropertyChanged(nameof(Result));
+            Result = EquationFormatter.Format(Nodes.Where(x => x.IsEnabled).ToList());
         }
 
         private void Solve(object parameter)
         {
             var data = (MigrationViewModel) parameter;
             var enabledEnterprises = new HashSet<string>(data.Enterprises.Where(x => x.IsEnabled).Select(x => x.Id));
-            var indices = data.Indices.AsParallel().Where(x => enabledEnterprises.Contains(x.EnterpriseId)).Select(x=>x.ToArray()).ToList();
+            var indices =
+                data.Indices.AsParallel()
+                    .Where(x => enabledEnterprises.Contains(x.EnterpriseId))
+                    .Select(x => x.ToArray())
+                    .ToList();
 
             var equationBuilder = new EquationSolver(Nodes);
             var result = equationBuilder.Solve(indices);
@@ -93,6 +133,11 @@ namespace FinancialForecasting.Desktop.ViewModels
             }
 
             ModelErrors = new ModelErrorCalculator(Nodes).Calculate(indices);
+        }
+
+        private void PrepareForecastData(object obj)
+        {
+            IsFlyoutOpen = true;
         }
 
         [NotifyPropertyChangedInvocator]

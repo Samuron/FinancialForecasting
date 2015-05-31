@@ -10,8 +10,7 @@ using FinancialForecasting.Migration.Entities;
 
 namespace FinancialForecasting.Migration
 {
-    [ServiceBehavior(UseSynchronizationContext = false, InstanceContextMode = InstanceContextMode.PerCall,
-        ConcurrencyMode = ConcurrencyMode.Multiple, IncludeExceptionDetailInFaults = true)]
+    [ServiceBehavior(UseSynchronizationContext = false, ConcurrencyMode = ConcurrencyMode.Multiple, IncludeExceptionDetailInFaults = true)]
     public class MigrationService : IMigrationService, IDisposable
     {
         private readonly FinancialForecastingContext _context;
@@ -30,16 +29,12 @@ namespace FinancialForecasting.Migration
 
         public IEnumerable<EnterpriseDto> GetEnterprises()
         {
-            return _context.Enterprises.AsNoTracking()
-                .Project().To<EnterpriseDto>()
-                .AsParallel().ToArray();
+            return _context.Enterprises.AsNoTracking().Project().To<EnterpriseDto>().AsParallel().ToArray();
         }
 
         public IEnumerable<EnterpriseIndexDto> GetIndexes()
         {
-            return _context.EnterpriseIndices.AsNoTracking()
-                .Project().To<EnterpriseIndexDto>()
-                .AsParallel().ToArray();
+            return _context.EnterpriseIndices.AsNoTracking().Project().To<EnterpriseIndexDto>().AsParallel().ToArray();
         }
 
         public void InsertEnterprise(EnterpriseDto enterprise)

@@ -1,4 +1,3 @@
-using System;
 using System.ServiceModel;
 
 namespace FinancialForecasting.Migration

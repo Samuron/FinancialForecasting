@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using FinancialForecasting.Desktop.Annotations;
 
 namespace FinancialForecasting.Desktop.Models
@@ -11,11 +9,16 @@ namespace FinancialForecasting.Desktop.Models
     public class EquationNodeModel : INotifyPropertyChanged
     {
         private double? _factor;
+        private double _forecasting;
         private bool _isEnabled;
         private bool _isK1Enabled;
         private bool _isK2Enabled;
         private bool _isK3Enabled;
         private bool _isVisible;
+        private double? _weight;
+        private double? _weightK1;
+        private double? _weightK2;
+        private double? _weightK3;
 
         public EquationNodeModel(string name, string shortName)
         {
@@ -112,6 +115,46 @@ namespace FinancialForecasting.Desktop.Models
 
         public double FactorK3 { get; set; }
 
+        public double? Weight
+        {
+            get { return _weight; }
+            set
+            {
+                _weight = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double? WeightK1
+        {
+            get { return _weightK1; }
+            set
+            {
+                _weightK1 = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double? WeightK2
+        {
+            get { return _weightK2; }
+            set
+            {
+                _weightK2 = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double? WeightK3
+        {
+            get { return _weightK3; }
+            set
+            {
+                _weightK3 = value;
+                OnPropertyChanged();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
@@ -130,11 +173,6 @@ namespace FinancialForecasting.Desktop.Models
             if (_isK3Enabled)
                 regressionCandidates.Add(3);
             return regressionCandidates.Max();
-        }
-
-        public int RequiredParamsCount()
-        {
-            return Convert.ToInt32(_isK1Enabled) + Convert.ToInt32(_isK2Enabled) + Convert.ToInt32(_isK3Enabled) + 1;
         }
     }
 }

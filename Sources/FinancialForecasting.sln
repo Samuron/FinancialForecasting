@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migration", "Migration", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.Migration.Data", "Services\Migration\FinancialForecasting.Migration.Data\FinancialForecasting.Migration.Data.csproj", "{536E4A73-6DAA-42B3-A844-F5783518E39D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.Migration.Tests", "Services\Migration\FinancialForecasting.Migration.Tests\FinancialForecasting.Migration.Tests.csproj", "{02264147-3278-403F-B28E-FBC03A90B1C6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.Migration.Contracts", "Services\Migration\FinancialForecasting.Migration.Contracts\FinancialForecasting.Migration.Contracts.csproj", "{41A813B7-11E2-4635-BB6D-D5222076DEFC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialForecasting.Migration.Service", "Services\Migration\FinancialForecasting.Migration.Service\FinancialForecasting.Migration.Service.csproj", "{6E1BC878-A2BE-42D9-B544-778AA5419240}"
@@ -35,10 +33,6 @@ Global
 		{536E4A73-6DAA-42B3-A844-F5783518E39D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{536E4A73-6DAA-42B3-A844-F5783518E39D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{536E4A73-6DAA-42B3-A844-F5783518E39D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{02264147-3278-403F-B28E-FBC03A90B1C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{02264147-3278-403F-B28E-FBC03A90B1C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{02264147-3278-403F-B28E-FBC03A90B1C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{02264147-3278-403F-B28E-FBC03A90B1C6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{41A813B7-11E2-4635-BB6D-D5222076DEFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{41A813B7-11E2-4635-BB6D-D5222076DEFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41A813B7-11E2-4635-BB6D-D5222076DEFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -70,7 +64,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3D9D3A01-7DBF-47DD-B178-D252B3B74527} = {BB23DDBF-9A37-48DF-84AC-89DE09528F4F}
 		{536E4A73-6DAA-42B3-A844-F5783518E39D} = {3D9D3A01-7DBF-47DD-B178-D252B3B74527}
-		{02264147-3278-403F-B28E-FBC03A90B1C6} = {3D9D3A01-7DBF-47DD-B178-D252B3B74527}
 		{41A813B7-11E2-4635-BB6D-D5222076DEFC} = {3D9D3A01-7DBF-47DD-B178-D252B3B74527}
 		{6E1BC878-A2BE-42D9-B544-778AA5419240} = {3D9D3A01-7DBF-47DD-B178-D252B3B74527}
 		{8D29DE3C-8FAE-4C94-ABE1-85D861352455} = {BB23DDBF-9A37-48DF-84AC-89DE09528F4F}

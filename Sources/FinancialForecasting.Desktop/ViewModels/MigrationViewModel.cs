@@ -1,21 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using FinancialForecasting.Desktop.Annotations;
 using FinancialForecasting.Desktop.Clients;
 using FinancialForecasting.Desktop.Extensions;
 using FinancialForecasting.Desktop.Models;
-using FinancialForecasting.Migration;
 using FinancialForecasting.Migration.DataContracts;
 using Microsoft.Win32;
 
 namespace FinancialForecasting.Desktop.ViewModels
 {
     [CallbackBehavior(UseSynchronizationContext = false, ConcurrencyMode = ConcurrencyMode.Reentrant)]
-    public class MigrationViewModel : INotifyPropertyChanged, INotifyMigrationProgress
+    public class MigrationViewModel : INotifyPropertyChanged
     {
         private readonly MigrationClient _service;
         private int _currentRow;
@@ -26,7 +27,7 @@ namespace FinancialForecasting.Desktop.ViewModels
 
         public MigrationViewModel()
         {
-            _service = new MigrationClient(this);
+            _service = new MigrationClient(SetupObserver());
             SelectFileCommand = new DelegateCommand(SelectFile);
             StartMigrationCommand = new DelegateCommand(StartMigration, CanStartMigration);
             Indices = LoadIndices();
@@ -96,28 +97,25 @@ namespace FinancialForecasting.Desktop.ViewModels
 
         public DelegateCommand StartMigrationCommand { get; }
 
-        public void AcceptMaxRows(int maxRows)
-        {
-            NumberOfRows = maxRows;
-        }
-
-        public void AcceptCurrentRow(int rowNumber)
-        {
-            CurrentRow = rowNumber;
-        }
-
-        public void MigrationFinished()
-        {
-            Indices = LoadIndices();
-            Enterprises = LoadEnterprises();
-            CurrentRow = 0;
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private MigrationObserver SetupObserver()
+        {
+            var migrationObserver = new MigrationObserver();
+            migrationObserver.Take(1).Subscribe(maxRows => { NumberOfRows = maxRows; });
+            migrationObserver.Skip(1).Subscribe(rowNumber => { CurrentRow = rowNumber; },
+                () =>
+                {
+                    Indices = LoadIndices();
+                    Enterprises = LoadEnterprises();
+                    CurrentRow = 0;
+                });
+            return migrationObserver;
+        }
 
         private IEnumerable<EnterpriseModel> LoadEnterprises()
         {
-            return _service.GetEnterprises().Select(ModelFactory.ToModel).ToObservable();
+            return _service.GetEnterprises().Select(ModelFactory.ToModel);
         }
 
         private IEnumerable<EnterpriseIndexDto> LoadIndices()
