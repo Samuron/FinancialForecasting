@@ -20,7 +20,7 @@
     <controls:MetroWindow.Flyouts>
         <controls:FlyoutsControl>
             <controls:Flyout Header="Прогнозування" Position="Right" Width="300"
-                             IsOpen="{Binding Solving.IsFlyoutOpen}" Theme="Accent" 
+                             IsOpen="{Binding Solving.IsFlyoutOpen}" Theme="Accent"
                              CloseCommand="{Binding Solving.ForecastCommand}">
                 <ListBox ItemsSource="{Binding Solving.Nodes}">
                     <ListBox.Resources>
@@ -46,11 +46,11 @@
                                          Text="{Binding Weight}"
                                          Margin="5" />
                                 <TextBox Grid.Row="2" Grid.Column="0" IsEnabled="{Binding IsK1Enabled}"
-                                         controls:TextBoxHelper.Watermark="K-1" 
+                                         controls:TextBoxHelper.Watermark="K-1"
                                          Text="{Binding WeightK1}"
                                          Margin="5" />
                                 <TextBox Grid.Row="2" Grid.Column="1" IsEnabled="{Binding IsK2Enabled}"
-                                         controls:TextBoxHelper.Watermark="K-2" 
+                                         controls:TextBoxHelper.Watermark="K-2"
                                          Text="{Binding WeightK2}"
                                          Margin="5" />
                                 <TextBox Grid.Row="2" Grid.Column="2" IsEnabled="{Binding IsK3Enabled}"

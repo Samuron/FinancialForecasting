@@ -65,9 +65,8 @@ namespace FinancialForecasting.Desktop.Models
                 _factor = value;
                 if (value == null)
                 {
-                    FactorK1 = default(double);
-                    FactorK2 = default(double);
-                    FactorK3 = default(double);
+                    FactorK1 = FactorK2 = FactorK3 = default(double);
+                    Weight = WeightK1 = WeightK2 = WeightK3 = null;
                 }
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsDefined));
